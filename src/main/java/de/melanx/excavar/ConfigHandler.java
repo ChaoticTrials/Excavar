@@ -17,7 +17,7 @@ public class ConfigHandler {
 
     public static void init(ForgeConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
-                .defineInRange("blocklimit", 16, 2, 1024);
+                .defineInRange("blocklimit", 16, 2, 10240);
         requiresCorrectTool = builder.comment("If set to true, you need the correct tool to break the blocks.")
                 .define("requiresCorrectTool", true);
     }
