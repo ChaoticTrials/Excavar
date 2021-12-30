@@ -1,4 +1,4 @@
-package de.melanx.excavar;
+package de.melanx.excavar.api;
 
 import com.google.common.collect.Sets;
 
