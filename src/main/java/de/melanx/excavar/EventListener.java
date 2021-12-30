@@ -19,7 +19,7 @@ public class EventListener {
         if (event.getPlayer() instanceof ServerPlayer player) {
             PlayerHandler playerHandler = Excavar.getPlayerHandler();
             UUID playerId = player.getGameProfile().getId();
-            if (playerHandler.canDig(playerId)) {
+            if (playerHandler.canDig(player)) {
                 DiggingEvent.Pre preEvent = new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), event.getState().getBlock());
                 if (preEvent.isCanceled()) {
                     return;

@@ -35,12 +35,12 @@ public class DiggingNetwork {
         );
     }
 
-    public void press(UUID id) {
-        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.PRESSED));
+    public void press(UUID id, boolean requiresSneaking) {
+        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.PRESSED, requiresSneaking));
     }
 
     public void release(UUID id) {
-        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.NOT_PRESSED));
+        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.NOT_PRESSED, false));
     }
 
     public void registerPackets() {

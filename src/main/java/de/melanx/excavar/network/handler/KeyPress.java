@@ -18,7 +18,7 @@ public class KeyPress {
             }
 
             switch (msg.type) {
-                case PRESSED -> Excavar.getPlayerHandler().addPlayer(msg.playerId);
+                case PRESSED -> Excavar.getPlayerHandler().addPlayer(msg.playerId, msg.requiresSneaking);
                 case NOT_PRESSED -> Excavar.getPlayerHandler().removePlayer(msg.playerId);
             }
         });
@@ -36,15 +36,16 @@ public class KeyPress {
         public void encode(Message msg, FriendlyByteBuf buffer) {
             buffer.writeUUID(msg.playerId);
             buffer.writeEnum(msg.type);
+            buffer.writeBoolean(msg.requiresSneaking);
         }
 
         @Override
         public Message decode(FriendlyByteBuf buffer) {
-            return new Message(buffer.readUUID(), buffer.readEnum(Type.class));
+            return new Message(buffer.readUUID(), buffer.readEnum(Type.class), buffer.readBoolean());
         }
     }
 
-    public record Message(UUID playerId, Type type) {
+    public record Message(UUID playerId, Type type, boolean requiresSneaking) {
 
     }
 

@@ -1,6 +1,7 @@
 package de.melanx.excavar;
 
 import de.melanx.excavar.api.PlayerHandler;
+import de.melanx.excavar.client.ClientExcavar;
 import de.melanx.excavar.network.DiggingNetwork;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
