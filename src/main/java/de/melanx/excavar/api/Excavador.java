@@ -3,6 +3,7 @@ package de.melanx.excavar.api;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import de.melanx.excavar.ConfigHandler;
+import de.melanx.excavar.Excavar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeHooks;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -21,21 +23,18 @@ public class Excavador {
     private final ServerPlayer player;
     private final Predicate<Block> testBlock;
     private final List<BlockPos> blocksToMine = Lists.newArrayList();
+    private final boolean preventToolBreaking;
 
-    public Excavador(BlockPos start, Level level, ServerPlayer player) {
+    public Excavador(@Nonnull BlockPos start, @Nonnull Level level, @Nonnull ServerPlayer player) {
         this.start = start;
         this.level = level;
         this.player = player;
         this.testBlock = block -> block == this.level.getBlockState(start).getBlock();
+        this.preventToolBreaking = Excavar.getPlayerHandler().getData(player.getGameProfile().getId()).preventToolBreaking();
     }
 
-    public void findBlocks(ItemStack tool) {
-        int limit;
-        if (tool.isDamageableItem() && !this.player.isCreative()) {
-            limit = Math.min(tool.getMaxDamage() - tool.getDamageValue(), ConfigHandler.blockLimit.get());
-        } else {
-            limit = ConfigHandler.blockLimit.get();
-        }
+    public void findBlocks() {
+        int limit = ConfigHandler.blockLimit.get();
         this.blocksToMine.add(this.start);
         Set<BlockPos> usedBlocks = Sets.newHashSet();
         limit--;
@@ -82,9 +81,13 @@ public class Excavador {
         return stepsLeft;
     }
 
-    public void mine() {
+    public void mine(ItemStack tool) {
+        int stopAt = this.preventToolBreaking ? 2 : 1;
         for (BlockPos pos : this.blocksToMine) {
             this.player.gameMode.destroyBlock(pos);
+            if (tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt && !this.player.isCreative()) {
+                break;
+            }
         }
     }
 

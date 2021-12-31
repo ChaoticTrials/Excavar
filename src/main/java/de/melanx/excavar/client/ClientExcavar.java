@@ -1,6 +1,7 @@
 package de.melanx.excavar.client;
 
 import de.melanx.excavar.Excavar;
+import de.melanx.excavar.api.PlayerHandler;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +44,7 @@ public class ClientExcavar {
         }
 
         if (action == GLFW.GLFW_PRESS) {
-            Excavar.getNetwork().press(player.getGameProfile().getId(), ClientConfig.onlyWhileSneaking.get());
+            Excavar.getNetwork().press(player.getGameProfile().getId(), new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get()));
         } else if (action == GLFW.GLFW_RELEASE) {
             Excavar.getNetwork().release(player.getGameProfile().getId());
         }

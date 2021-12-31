@@ -1,6 +1,7 @@
 package de.melanx.excavar.network;
 
 import de.melanx.excavar.Excavar;
+import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.network.handler.KeyPress;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.DistExecutor;
@@ -35,12 +36,12 @@ public class DiggingNetwork {
         );
     }
 
-    public void press(UUID id, boolean requiresSneaking) {
-        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.PRESSED, requiresSneaking));
+    public void press(UUID id, PlayerHandler.ClientData data) {
+        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.PRESSED, data));
     }
 
     public void release(UUID id) {
-        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.NOT_PRESSED, false));
+        this.channel.sendToServer(new KeyPress.Message(id, KeyPress.Type.NOT_PRESSED, PlayerHandler.ClientData.EMPTY));
     }
 
     public void registerPackets() {

@@ -27,7 +27,7 @@ public class EventListener {
 
                 playerHandler.startDigging(playerId);
                 Excavador excavador = new Excavador(event.getPos(), player.level, player);
-                excavador.findBlocks(event.getPlayer().getMainHandItem());
+                excavador.findBlocks();
 
                 DiggingEvent.FoundPositions foundPositionsEvent = new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock());
                 if (foundPositionsEvent.isCanceled()) {
@@ -36,9 +36,8 @@ public class EventListener {
                 }
 
                 MinecraftForge.EVENT_BUS.post(foundPositionsEvent);
-                excavador.mine();
+                excavador.mine(event.getPlayer().getMainHandItem());
                 playerHandler.stopDigging(playerId);
-                System.out.println(excavador.getBlocksToMine().size());
                 MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()));
             }
         }
