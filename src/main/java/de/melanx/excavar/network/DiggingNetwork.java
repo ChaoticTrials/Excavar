@@ -29,10 +29,10 @@ public class DiggingNetwork {
     public DiggingNetwork() {
         this.channel = NetworkRegistry.newSimpleChannel(
                 new ResourceLocation(Excavar.MODID, "netchannel"),
-                () -> "1.0",
+                () -> "1.1",
                 // allow joining if mod is not installed on client/server
-                s -> true,
-                s -> true
+                s -> NetworkRegistry.ACCEPTVANILLA.equals(s),
+                s -> NetworkRegistry.ACCEPTVANILLA.equals(s)
         );
     }
 
