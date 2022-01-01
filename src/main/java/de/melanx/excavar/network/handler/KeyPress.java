@@ -2,7 +2,6 @@ package de.melanx.excavar.network.handler;
 
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.PlayerHandler;
-import de.melanx.excavar.network.PacketSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -18,41 +17,29 @@ public class KeyPress {
                 return;
             }
 
-            switch (msg.type) {
-                case PRESSED -> Excavar.getPlayerHandler().addPlayer(msg.playerId, msg.data);
-                case NOT_PRESSED -> Excavar.getPlayerHandler().removePlayer(msg.playerId);
+            if (msg.pressed) {
+                Excavar.getPlayerHandler().addPlayer(msg.playerId, msg.data);
+            } else {
+                Excavar.getPlayerHandler().removePlayer(msg.playerId);
             }
         });
         ctx.setPacketHandled(true);
     }
 
-    public static class Serializer implements PacketSerializer<Message> {
+    public static class Serializer {
 
-        @Override
-        public Class<Message> messageClass() {
-            return Message.class;
-        }
-
-        @Override
         public void encode(Message msg, FriendlyByteBuf buffer) {
             buffer.writeUUID(msg.playerId);
-            buffer.writeEnum(msg.type);
+            buffer.writeBoolean(msg.pressed);
             buffer.writeBoolean(msg.data().requiresSneaking());
             buffer.writeBoolean(msg.data().preventToolBreaking());
         }
 
-        @Override
         public Message decode(FriendlyByteBuf buffer) {
-            return new Message(buffer.readUUID(), buffer.readEnum(Type.class), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean()));
+            return new Message(buffer.readUUID(), buffer.readBoolean(), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean()));
         }
     }
 
-    public record Message(UUID playerId, Type type, PlayerHandler.ClientData data) {
-
-    }
-
-    public enum Type {
-        PRESSED,
-        NOT_PRESSED
+    public record Message(UUID playerId, boolean pressed, PlayerHandler.ClientData data) {
     }
 }
