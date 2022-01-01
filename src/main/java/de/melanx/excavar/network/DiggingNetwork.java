@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 public class DiggingNetwork {
 
     private static final Object LOCK = new Object();
+    private static final String NET_VERSION = "1.2";
 
     private final SimpleChannel channel;
     private int id = 0;
@@ -29,10 +30,10 @@ public class DiggingNetwork {
     public DiggingNetwork() {
         this.channel = NetworkRegistry.newSimpleChannel(
                 new ResourceLocation(Excavar.MODID, "netchannel"),
-                () -> "1.1",
+                () -> NET_VERSION,
                 // allow joining if mod is not installed on client/server
-                s -> NetworkRegistry.ACCEPTVANILLA.equals(s),
-                s -> NetworkRegistry.ACCEPTVANILLA.equals(s)
+                s -> NET_VERSION.equals(s) || NetworkRegistry.ACCEPTVANILLA.equals(s),
+                s -> NET_VERSION.equals(s) || NetworkRegistry.ACCEPTVANILLA.equals(s)
         );
     }
 
