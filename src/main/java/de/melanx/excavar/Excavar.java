@@ -12,7 +12,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.NetworkConstants;
+import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
 
 @Mod(Excavar.MODID)
 public class Excavar {
@@ -34,7 +34,7 @@ public class Excavar {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         network.registerPackets();
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (remote, isServer) -> true));
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (remote, isServer) -> true));
     }
 
     public static DiggingNetwork getNetwork() {

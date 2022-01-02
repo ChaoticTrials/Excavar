@@ -3,7 +3,7 @@ package de.melanx.excavar.network.handler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.PlayerHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.UUID;
 import java.util.function.Supplier;
