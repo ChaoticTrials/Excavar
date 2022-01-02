@@ -31,8 +31,8 @@ public class KeyPress {
         public void encode(Message msg, FriendlyByteBuf buffer) {
             buffer.writeUUID(msg.playerId);
             buffer.writeBoolean(msg.pressed);
-            buffer.writeBoolean(msg.data().requiresSneaking());
-            buffer.writeBoolean(msg.data().preventToolBreaking());
+            buffer.writeBoolean(msg.data.requiresSneaking());
+            buffer.writeBoolean(msg.data.preventToolBreaking());
         }
 
         public Message decode(FriendlyByteBuf buffer) {
