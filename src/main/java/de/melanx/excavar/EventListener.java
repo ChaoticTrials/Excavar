@@ -20,23 +20,19 @@ public class EventListener {
             PlayerHandler playerHandler = Excavar.getPlayerHandler();
             UUID playerId = player.getGameProfile().getId();
             if (playerHandler.canDig(player)) {
-                DiggingEvent.Pre preEvent = new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), event.getState().getBlock());
-                MinecraftForge.EVENT_BUS.post(preEvent);
-                if (preEvent.isCanceled()) {
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), event.getState().getBlock()))) {
                     return;
                 }
 
-                playerHandler.startDigging(playerId);
                 Excavador excavador = new Excavador(event.getPos(), player.level, player);
                 excavador.findBlocks();
 
-                DiggingEvent.FoundPositions foundPositionsEvent = new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock());
-                MinecraftForge.EVENT_BUS.post(foundPositionsEvent);
-                if (foundPositionsEvent.isCanceled()) {
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()))) {
                     playerHandler.stopDigging(playerId);
                     return;
                 }
 
+                playerHandler.startDigging(playerId);
                 excavador.mine(event.getPlayer().getMainHandItem());
                 playerHandler.stopDigging(playerId);
                 MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()));

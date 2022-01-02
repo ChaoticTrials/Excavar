@@ -44,9 +44,9 @@ public class ClientExcavar {
         }
 
         if (action == GLFW.GLFW_PRESS) {
-            Excavar.getNetwork().press(player.getGameProfile().getId(), new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get()));
+            Excavar.getNetwork().press(player, new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get()));
         } else if (action == GLFW.GLFW_RELEASE) {
-            Excavar.getNetwork().release(player.getGameProfile().getId());
+            Excavar.getNetwork().release(player);
         }
     }
 }
