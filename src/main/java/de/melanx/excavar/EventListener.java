@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import de.melanx.excavar.api.Excavador;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.events.DiggingEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,26 +16,27 @@ public class EventListener {
 
     @SubscribeEvent
     public void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.getPlayer() instanceof ServerPlayer player) {
+        if (event.getPlayer() instanceof ServerPlayerEntity) {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
             PlayerHandler playerHandler = Excavar.getPlayerHandler();
             UUID playerId = player.getGameProfile().getId();
             if (playerHandler.canDig(player)) {
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), event.getState().getBlock()))) {
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerWorld) player.world, player, Lists.newArrayList(), event.getState().getBlock()))) {
                     return;
                 }
 
-                Excavador excavador = new Excavador(event.getPos(), player.level, player);
+                Excavador excavador = new Excavador(event.getPos(), player.world, player);
                 excavador.findBlocks();
 
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()))) {
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerWorld) player.world, player, excavador.getBlocksToMine(), event.getState().getBlock()))) {
                     playerHandler.stopDigging(playerId);
                     return;
                 }
 
                 playerHandler.startDigging(playerId);
-                excavador.mine(event.getPlayer().getMainHandItem());
+                excavador.mine(player.getHeldItemMainhand());
                 playerHandler.stopDigging(playerId);
-                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()));
+                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerWorld) player.world, player, excavador.getBlocksToMine(), event.getState().getBlock()));
             }
         }
     }

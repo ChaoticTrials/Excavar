@@ -3,12 +3,12 @@ package de.melanx.excavar.network;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.network.handler.KeyPress;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.Optional;
 
@@ -31,14 +31,14 @@ public class DiggingNetwork {
         );
     }
 
-    public void press(Player player, PlayerHandler.ClientData data) {
-        if (player instanceof LocalPlayer localPlayer && this.channel.isRemotePresent(localPlayer.connection.getConnection())) {
+    public void press(PlayerEntity player, PlayerHandler.ClientData data) {
+        if (player instanceof ClientPlayerEntity && this.channel.isRemotePresent(((ClientPlayerEntity) player).connection.getNetworkManager())) {
             this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), true, data));
         }
     }
 
-    public void release(Player player) {
-        if (player instanceof LocalPlayer localPlayer && this.channel.isRemotePresent(localPlayer.connection.getConnection())) {
+    public void release(PlayerEntity player) {
+        if (player instanceof ClientPlayerEntity && this.channel.isRemotePresent(((ClientPlayerEntity) player).connection.getNetworkManager())) {
             this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), false, PlayerHandler.ClientData.EMPTY));
         }
     }

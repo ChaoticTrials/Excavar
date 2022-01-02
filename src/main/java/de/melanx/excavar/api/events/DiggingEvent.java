@@ -1,22 +1,22 @@
 package de.melanx.excavar.api.events;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
 public class DiggingEvent extends Event {
 
-    private final ServerLevel level;
-    private final ServerPlayer player;
+    private final ServerWorld world;
+    private final ServerPlayerEntity player;
     private final List<BlockPos> positions;
     private final Block block;
 
-    private DiggingEvent(ServerLevel level, ServerPlayer player, List<BlockPos> positions, Block block) {
-        this.level = level;
+    private DiggingEvent(ServerWorld world, ServerPlayerEntity player, List<BlockPos> positions, Block block) {
+        this.world = world;
         this.player = player;
         this.positions = positions;
         this.block = block;
@@ -25,14 +25,14 @@ public class DiggingEvent extends Event {
     /**
      * @return The level were the blocks will be broken
      */
-    public ServerLevel getLevel() {
-        return this.level;
+    public ServerWorld getLevel() {
+        return this.world;
     }
 
     /**
      * @return The digger
      */
-    public ServerPlayer getPlayer() {
+    public ServerPlayerEntity getPlayer() {
         return this.player;
     }
 
@@ -57,8 +57,8 @@ public class DiggingEvent extends Event {
      */
     public static class Pre extends DiggingEvent {
 
-        public Pre(ServerLevel level, ServerPlayer player, List<BlockPos> positions, Block block) {
-            super(level, player, positions, block);
+        public Pre(ServerWorld world, ServerPlayerEntity player, List<BlockPos> positions, Block block) {
+            super(world, player, positions, block);
         }
 
         @Override
@@ -75,8 +75,8 @@ public class DiggingEvent extends Event {
     public static class FoundPositions extends DiggingEvent {
 
 
-        public FoundPositions(ServerLevel level, ServerPlayer player, List<BlockPos> positions, Block block) {
-            super(level, player, positions, block);
+        public FoundPositions(ServerWorld world, ServerPlayerEntity player, List<BlockPos> positions, Block block) {
+            super(world, player, positions, block);
         }
 
         @Override
@@ -91,8 +91,8 @@ public class DiggingEvent extends Event {
      */
     public static class Post extends DiggingEvent {
 
-        public Post(ServerLevel level, ServerPlayer player, List<BlockPos> positions, Block block) {
-            super(level, player, positions, block);
+        public Post(ServerWorld world, ServerPlayerEntity player, List<BlockPos> positions, Block block) {
+            super(world, player, positions, block);
         }
     }
 }

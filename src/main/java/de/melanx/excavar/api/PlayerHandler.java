@@ -2,7 +2,7 @@ package de.melanx.excavar.api;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.entity.player.PlayerEntity;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -22,9 +22,9 @@ public class PlayerHandler {
         this.diggers.remove(id);
     }
 
-    public boolean canDig(Player player) {
+    public boolean canDig(PlayerEntity player) {
         UUID id = player.getGameProfile().getId();
-        return this.players.containsKey(id) && (!this.players.get(id).requiresSneaking || player.isShiftKeyDown()) && !this.diggers.contains(id);
+        return this.players.containsKey(id) && (!this.players.get(id).requiresSneaking || player.isSneaking()) && !this.diggers.contains(id);
     }
 
     public void addPlayer(UUID id, ClientData data) {
@@ -40,7 +40,23 @@ public class PlayerHandler {
         return this.players.getOrDefault(id, null);
     }
 
-    public record ClientData(boolean requiresSneaking, boolean preventToolBreaking) {
+    public static class ClientData {
+
+        private final boolean requiresSneaking;
+        private final boolean preventToolBreaking;
+
+        public ClientData(boolean requiresSneaking, boolean preventToolBreaking) {
+            this.requiresSneaking = requiresSneaking;
+            this.preventToolBreaking = preventToolBreaking;
+        }
+
+        public boolean requiresSneaking() {
+            return this.requiresSneaking;
+        }
+
+        public boolean preventToolBreaking() {
+            return this.preventToolBreaking;
+        }
 
         public static final ClientData EMPTY = new ClientData(false, false);
     }
