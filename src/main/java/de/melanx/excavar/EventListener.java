@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.melanx.excavar.api.Excavador;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.events.DiggingEvent;
+import de.melanx.excavar.config.ListHandler;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +26,7 @@ public class EventListener {
             UUID playerId = player.getGameProfile().getId();
             if (playerHandler.canDig(player)) {
                 BlockState state = event.getState();
-                if (!ShapeUtil.miningAllowed(state)) {
+                if (!ShapeUtil.miningAllowed(state) || !ListHandler.isToolAllowed(player.getMainHandItem())) {
                     return;
                 }
 

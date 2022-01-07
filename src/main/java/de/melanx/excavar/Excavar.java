@@ -3,6 +3,7 @@ package de.melanx.excavar;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.client.ClientExcavar;
+import de.melanx.excavar.config.ListHandler;
 import de.melanx.excavar.impl.shape.EasyShapeless;
 import de.melanx.excavar.impl.shape.PlantsShapeless;
 import de.melanx.excavar.impl.shape.Shapeless;
@@ -14,15 +15,19 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(Excavar.MODID)
 public class Excavar {
 
     public static final String MODID = "excavar";
+    public static final Logger LOGGER = LogManager.getLogger(MODID);
     private static DiggingNetwork network;
     private static PlayerHandler playerHandler;
 
@@ -31,6 +36,7 @@ public class Excavar {
         playerHandler = new PlayerHandler();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_CONFIG);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigChange);
         MinecraftForge.EVENT_BUS.register(new EventListener());
         if (FMLEnvironment.dist == Dist.CLIENT) {
             new ClientExcavar();
@@ -45,6 +51,10 @@ public class Excavar {
         Shapes.register(Shapes.EASY_SHAPELESS, new EasyShapeless());
         Shapes.register(Shapes.PLANTS_SHAPELESS, new PlantsShapeless());
         Shapes.register(Shapes.TUNNEL, new Tunnel());
+    }
+
+    private void onConfigChange(ModConfigEvent event) {
+        ListHandler.refreshLists();
     }
 
     public static DiggingNetwork getNetwork() {

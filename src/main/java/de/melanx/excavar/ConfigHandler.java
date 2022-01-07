@@ -2,6 +2,9 @@ package de.melanx.excavar;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ConfigHandler {
 
     public static final ForgeConfigSpec COMMON_CONFIG;
@@ -16,6 +19,7 @@ public class ConfigHandler {
     public static ForgeConfigSpec.BooleanValue requiresCorrectTool;
     public static ForgeConfigSpec.BooleanValue disableDiagonals;
     public static ForgeConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> deniedTools;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
@@ -27,5 +31,11 @@ public class ConfigHandler {
                 .define("disableDiagonals", false);
         allowedBlocks = builder.comment("Defines which blocks can be mined with Excavar")
                 .defineEnum("allowedBlocks", ShapeUtil.Type.ALL);
+        deniedTools = builder.comment("A list of tools which aren't allowed.",
+                        "You can use \"*\" to define a wildcard, e.g. \"minecraft:*_pickaxe\" will add all vanilla pickaxes to the list.")
+                .defineList("forbiddenItems", Arrays.asList(
+                        "botania:terra_axe",
+                        "botania:terra_pick"
+                ), s -> s instanceof String);
     }
 }
