@@ -25,7 +25,7 @@ public class ShapeUtil {
             return Shapes.PLANTS_SHAPELESS;
         }
 
-        return Shapes.SHAPELESS;
+        return ConfigHandler.disableDiagonals.get() ? Shapes.EASY_SHAPELESS : Shapes.SHAPELESS;
     }
 
     enum Type {
