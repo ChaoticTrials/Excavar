@@ -4,8 +4,12 @@ import com.google.common.collect.Lists;
 import de.melanx.excavar.api.Excavador;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.events.DiggingEvent;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,14 +24,21 @@ public class EventListener {
             PlayerHandler playerHandler = Excavar.getPlayerHandler();
             UUID playerId = player.getGameProfile().getId();
             if (playerHandler.canDig(player)) {
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), event.getState().getBlock()))) {
+                BlockState state = event.getState();
+                if (!ShapeUtil.miningAllowed(state)) {
                     return;
                 }
 
-                Excavador excavador = new Excavador(event.getPos(), player.level, player);
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), state.getBlock()))) {
+                    return;
+                }
+
+                Direction side = ((BlockHitResult) player.pick(20, 0, false)).getDirection();
+                ResourceLocation shapeId = ShapeUtil.getShapeId(state.getBlock());
+                Excavador excavador = new Excavador(shapeId, event.getPos(), player.level, player, side, state);
                 excavador.findBlocks();
 
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()))) {
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), state.getBlock()))) {
                     playerHandler.stopDigging(playerId);
                     return;
                 }
@@ -35,7 +46,7 @@ public class EventListener {
                 playerHandler.startDigging(playerId);
                 excavador.mine(event.getPlayer().getMainHandItem());
                 playerHandler.stopDigging(playerId);
-                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) player.level, player, excavador.getBlocksToMine(), event.getState().getBlock()));
+                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) player.level, player, excavador.getBlocksToMine(), state.getBlock()));
             }
         }
     }

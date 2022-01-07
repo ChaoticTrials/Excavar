@@ -14,11 +14,14 @@ public class ConfigHandler {
 
     public static ForgeConfigSpec.IntValue blockLimit;
     public static ForgeConfigSpec.BooleanValue requiresCorrectTool;
+    public static ForgeConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
                 .defineInRange("blocklimit", 16, 2, 8192);
         requiresCorrectTool = builder.comment("If set to true, you need the correct tool to break the blocks.")
                 .define("requiresCorrectTool", true);
+        allowedBlocks = builder.comment("Defines which blocks can be mined with Excavar")
+                .defineEnum("allowedBlocks", ShapeUtil.Type.ALL);
     }
 }

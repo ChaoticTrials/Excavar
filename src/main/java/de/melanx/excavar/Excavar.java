@@ -1,7 +1,12 @@
 package de.melanx.excavar;
 
 import de.melanx.excavar.api.PlayerHandler;
+import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.client.ClientExcavar;
+import de.melanx.excavar.impl.shape.EasyShapeless;
+import de.melanx.excavar.impl.shape.PlantsShapeless;
+import de.melanx.excavar.impl.shape.Shapeless;
+import de.melanx.excavar.impl.shape.Tunnel;
 import de.melanx.excavar.network.DiggingNetwork;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +40,11 @@ public class Excavar {
     private void commonSetup(FMLCommonSetupEvent event) {
         network.registerPackets();
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (remote, isServer) -> true));
+
+        Shapes.register(Shapes.SHAPELESS, new Shapeless());
+        Shapes.register(Shapes.EASY_SHAPELESS, new EasyShapeless());
+        Shapes.register(Shapes.PLANTS_SHAPELESS, new PlantsShapeless());
+        Shapes.register(Shapes.TUNNEL, new Tunnel());
     }
 
     public static DiggingNetwork getNetwork() {
