@@ -21,10 +21,10 @@ import java.util.Set;
 
 public class Excavador {
 
-    private final BlockPos start;
-    private final Level level;
-    private final ServerPlayer player;
-    private final Direction side;
+    public final BlockPos start;
+    public final Level level;
+    public final ServerPlayer player;
+    public final Direction side;
     private final BlockState originalState;
     private final List<BlockPos> blocksToMine = Lists.newArrayList();
     private final boolean preventToolBreaking;
@@ -80,7 +80,7 @@ public class Excavador {
      * @param preventToolBreaking Whether the tool should be saved while mining
      */
     public Excavador(@Nonnull ResourceLocation shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull ServerPlayer player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool, boolean preventToolBreaking) {
-        this.start = start;
+        this.start = start.immutable();
         this.level = level;
         this.player = player;
         this.side = side;
@@ -91,9 +91,10 @@ public class Excavador {
     }
 
     /**
-     * Searches for the {@link BlockPos}es to break
+     * Searches for the {@link BlockPos}es to break if not already searched.
      */
     public void findBlocks() {
+        if (!this.blocksToMine.isEmpty()) return;
         int limit = ConfigHandler.blockLimit.get();
         this.blocksToMine.add(this.start);
         Set<BlockPos> usedBlocks = Sets.newHashSet();
