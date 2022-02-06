@@ -2,31 +2,50 @@ package de.melanx.excavar.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.Excavador;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.commons.compress.utils.Lists;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BlockHighlighter {
-    
+
     private final Excavador excavador;
     private VoxelShape shape;
+    private final ClientLevel level;
 
     public BlockHighlighter(Excavador excavador) {
         this.excavador = excavador;
+        this.level = Minecraft.getInstance().level;
     }
-    
+
+    public BlockHighlighter(BlockHitResult hitResult) {
+        this.level = Minecraft.getInstance().level;
+        LocalPlayer player = Minecraft.getInstance().player;
+        //noinspection ConstantConditions
+        BlockState state = this.level.getBlockState(hitResult.getBlockPos());
+        ResourceLocation shapeId = ShapeUtil.getShapeId(state.getBlock());
+        //noinspection ConstantConditions
+        this.excavador = new Excavador(shapeId, hitResult.getBlockPos(), this.level, player, hitResult.getDirection(), state);
+    }
+
     private VoxelShape shape() {
         if (this.shape == null) {
             this.excavador.findBlocks();
-            List<VoxelShape> allShapes = new ArrayList<>();
+            List<VoxelShape> allShapes = Lists.newArrayList();
             for (BlockPos pos : this.excavador.getBlocksToMine()) {
                 VoxelShape blockShape = this.excavador.level.getBlockState(pos).getVisualShape(this.excavador.level, pos, CollisionContext.empty());
                 double dx = pos.getX() - this.excavador.start.getX();
@@ -36,16 +55,17 @@ public class BlockHighlighter {
             }
             this.shape = Shapes.or(Shapes.empty(), allShapes.toArray(new VoxelShape[]{})).optimize();
         }
+
         return this.shape;
     }
-    
-    public void render(PoseStack poseStack) {
+
+    public void render(LevelRenderer levelRenderer, PoseStack poseStack) {
         poseStack.pushPose();
         Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         poseStack.translate(this.excavador.start.getX() - projection.x, this.excavador.start.getY() - projection.y, this.excavador.start.getZ() - projection.z);
-        
-        VertexConsumer vertex = null; // TODO get an outline buffer.
-        LevelRenderer.renderVoxelShape(poseStack, vertex, this.shape(), 0, 0, 0, 1, 1, 1, 1);
+
+        VertexConsumer vertex = OutlineBuffer.INSTANCE.getBuffer(RenderType.lines());
+        LevelRenderer.renderShape(poseStack, vertex, this.shape(), 0, 0, 0, 1, 1, 1, 1);
         poseStack.popPose();
     }
 }
