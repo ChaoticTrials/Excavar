@@ -16,7 +16,7 @@ import java.util.Optional;
 // https://github.com/noeppi-noeppi/LibX/blob/405e75973b247cd3374a420b4127bb59d28417d5/src/main/java/io/github/noeppi_noeppi/libx/network/NetworkX.java
 public class DiggingNetwork {
 
-    private static final String NET_VERSION = "1.3";
+    private static final String NET_VERSION = "1.4";
 
     private final SimpleChannel channel;
     private int id = 0;

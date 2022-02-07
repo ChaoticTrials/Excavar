@@ -1,5 +1,6 @@
 package de.melanx.excavar.client;
 
+import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.PlayerHandler;
@@ -64,6 +65,10 @@ public class ClientExcavar {
 
     @SubscribeEvent
     public void mouseScroll(InputEvent.MouseScrollEvent event) {
+        if (!ConfigHandler.allowShapeSelection.get()) {
+            return;
+        }
+
         if (EXCAVAR.isDown() && Screen.hasShiftDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().screen == null) {
             ResourceLocation prevId = Shapes.getSelectedShape();
             ResourceLocation id;
