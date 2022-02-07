@@ -47,7 +47,7 @@ public class Excavador {
      * @see #Excavador(ResourceLocation, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
      */
     public Excavador(@Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool) {
-        this(Shapes.EASY_SHAPELESS, start, level, player, side, originalState, requiresCorrectTool, Excavar.getPlayerHandler().getData(player.getGameProfile().getId()).preventToolBreaking());
+        this(Shapes.getSelectedShape(), start, level, player, side, originalState, requiresCorrectTool, Excavar.getPlayerHandler().getData(player.getGameProfile().getId()).preventToolBreaking());
     }
 
     /**

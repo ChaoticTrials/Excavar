@@ -3,12 +3,17 @@ package de.melanx.excavar.client;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.PlayerHandler;
+import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.config.ListHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,12 +46,36 @@ public class ClientExcavar {
         if (event.getKey() == EXCAVAR.getKey().getValue()) {
             ClientExcavar.handleInput(event.getAction());
         }
+
+        if (EXCAVAR.isDown() && Screen.hasShiftDown() && Minecraft.getInstance().player != null) {
+            ResourceLocation id = Shapes.getSelectedShape();
+            TranslatableComponent msg = new TranslatableComponent("excavar.shape.selected");
+            msg.append(new TranslatableComponent(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
+            Minecraft.getInstance().player.displayClientMessage(msg, true);
+        }
     }
 
     @SubscribeEvent
     public void mouseInput(InputEvent.MouseInputEvent event) {
         if (event.getButton() == EXCAVAR.getKey().getValue()) {
             ClientExcavar.handleInput(event.getAction());
+        }
+    }
+
+    @SubscribeEvent
+    public void mouseScroll(InputEvent.MouseScrollEvent event) {
+        if (EXCAVAR.isDown() && Screen.hasShiftDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().screen == null) {
+            ResourceLocation prevId = Shapes.getSelectedShape();
+            ResourceLocation id;
+            if (event.getScrollDelta() > 0) {
+                id = Shapes.previousShapeId();
+            } else {
+                id = Shapes.nextShapeId();
+            }
+
+            if (prevId != id) {
+                event.setCanceled(true);
+            }
         }
     }
 
@@ -83,7 +112,7 @@ public class ClientExcavar {
         }
 
         if (action == GLFW.GLFW_PRESS) {
-            PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get());
+            PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), Shapes.getSelectedShape());
             Excavar.getNetwork().press(player, data);
             Excavar.getPlayerHandler().addPlayer(player.getGameProfile().getId(), data);
         } else if (action == GLFW.GLFW_RELEASE) {

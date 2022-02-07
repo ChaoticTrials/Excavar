@@ -37,7 +37,10 @@ public class BlockHighlighter {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
         BlockState state = this.level.getBlockState(hitResult.getBlockPos());
-        ResourceLocation shapeId = ShapeUtil.getShapeId(state.getBlock());
+        ResourceLocation shapeId = de.melanx.excavar.api.shape.Shapes.getSelectedShape();
+        if (shapeId == de.melanx.excavar.api.shape.Shapes.SHAPELESS) {
+            shapeId = ShapeUtil.getShapeId(state.getBlock());
+        }
         //noinspection ConstantConditions
         this.excavador = new Excavador(shapeId, hitResult.getBlockPos(), this.level, player, hitResult.getDirection(), state);
     }

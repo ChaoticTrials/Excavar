@@ -33,10 +33,11 @@ public class KeyPress {
             buffer.writeBoolean(msg.pressed);
             buffer.writeBoolean(msg.data.requiresSneaking());
             buffer.writeBoolean(msg.data.preventToolBreaking());
+            buffer.writeResourceLocation(msg.data.shapeId());
         }
 
         public Message decode(FriendlyByteBuf buffer) {
-            return new Message(buffer.readUUID(), buffer.readBoolean(), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean()));
+            return new Message(buffer.readUUID(), buffer.readBoolean(), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readResourceLocation()));
         }
     }
 

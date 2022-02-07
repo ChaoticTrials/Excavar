@@ -48,8 +48,8 @@ public class Excavar {
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (remote, isServer) -> true));
 
         Shapes.register(Shapes.SHAPELESS, new Shapeless());
-        Shapes.register(Shapes.EASY_SHAPELESS, new EasyShapeless());
-        Shapes.register(Shapes.PLANTS_SHAPELESS, new PlantsShapeless());
+        Shapes.register(Shapes.EASY_SHAPELESS, new EasyShapeless(), false);
+        Shapes.register(Shapes.PLANTS_SHAPELESS, new PlantsShapeless(), false);
         Shapes.register(Shapes.TUNNEL, new Tunnel());
     }
 

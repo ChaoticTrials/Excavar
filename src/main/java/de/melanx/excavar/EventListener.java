@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.melanx.excavar.api.Excavador;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.events.DiggingEvent;
+import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.config.ListHandler;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -35,7 +36,12 @@ public class EventListener {
                 }
 
                 Direction side = ((BlockHitResult) player.pick(20, 0, false)).getDirection();
-                ResourceLocation shapeId = ShapeUtil.getShapeId(state.getBlock());
+
+                ResourceLocation shapeId = playerHandler.getShapeId(playerId);
+                if (shapeId == Shapes.SHAPELESS) {
+                    shapeId = ShapeUtil.getShapeId(state.getBlock());
+                }
+
                 Excavador excavador = new Excavador(shapeId, event.getPos(), player.level, player, side, state);
                 excavador.findBlocks();
 

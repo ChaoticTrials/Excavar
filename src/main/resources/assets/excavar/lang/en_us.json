@@ -1,3 +1,6 @@
 {
-  "excavar.key.excavar": "Multimine"
+  "excavar.key.excavar": "Multimine",
+  "excavar.shape.selected": "Selected shape: ",
+  "excavar.shape.shapeless.desc": "Shapeless",
+  "excavar.shape.tunnel.desc": "Tunnel"
 }

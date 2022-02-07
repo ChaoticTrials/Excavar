@@ -2,6 +2,8 @@ package de.melanx.excavar.api;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import de.melanx.excavar.api.shape.Shapes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nonnull;
@@ -39,6 +41,14 @@ public class PlayerHandler {
     }
 
     /**
+     * Provides the selected shape id of the given player.
+     */
+    public ResourceLocation getShapeId(UUID id) {
+        ClientData data = this.players.get(id);
+        return data == null ? Shapes.getSelectedShape() : data.shapeId();
+    }
+
+    /**
      * Adds a player to the players which could use it.
      *
      * @param id   The {@link UUID} of the player
@@ -69,8 +79,9 @@ public class PlayerHandler {
     /**
      * Used to store the client config in the {@link PlayerHandler}
      */
-    public record ClientData(boolean requiresSneaking, boolean preventToolBreaking) {
+    public record ClientData(boolean requiresSneaking, boolean preventToolBreaking, ResourceLocation shapeId) {
 
-        public static final ClientData EMPTY = new ClientData(false, false);
+        private static final ResourceLocation MISSINGNO = new ResourceLocation("minecraft", "missingno");
+        public static final ClientData EMPTY = new ClientData(false, false, MISSINGNO);
     }
 }
