@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ConfigHandler {
 
-    public static final ForgeConfigSpec COMMON_CONFIG;
-    private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+    public static final ForgeConfigSpec SERVER_CONFIG;
+    private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 
     static {
-        init(COMMON_BUILDER);
-        COMMON_CONFIG = COMMON_BUILDER.build();
+        init(SERVER_BUILDER);
+        SERVER_CONFIG = SERVER_BUILDER.build();
     }
 
     public static ForgeConfigSpec.IntValue blockLimit;

@@ -1,6 +1,7 @@
 package de.melanx.excavar.client;
 
 import de.melanx.excavar.Excavar;
+import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.config.ListHandler;
 import net.minecraft.client.KeyMapping;
@@ -57,12 +58,17 @@ public class ClientExcavar {
             return;
         }
 
+        BlockHitResult hitResult = event.getTarget();
+        BlockState state = player.level.getBlockState(hitResult.getBlockPos());
+
+        if (!ShapeUtil.miningAllowed(state)) {
+            return;
+        }
+
         if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get())) {
-            BlockHitResult hitResult = event.getTarget();
-            BlockState newState = player.level.getBlockState(hitResult.getBlockPos());
-            if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), newState) || this.blockHighlighter == null) {
+            if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state) || this.blockHighlighter == null) {
                 this.blockHighlighter = new BlockHighlighter(hitResult);
-                this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), newState);
+                this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state);
             }
             this.blockHighlighter.render(event.getLevelRenderer(), event.getPoseStack());
         } else {

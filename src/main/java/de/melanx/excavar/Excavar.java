@@ -34,7 +34,7 @@ public class Excavar {
     public Excavar() {
         network = new DiggingNetwork();
         playerHandler = new PlayerHandler();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigHandler.SERVER_CONFIG);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigChange);
         MinecraftForge.EVENT_BUS.register(new EventListener());
