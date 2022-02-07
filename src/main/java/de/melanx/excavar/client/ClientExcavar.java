@@ -53,7 +53,7 @@ public class ClientExcavar {
     public void renderBlockHighlights(DrawSelectionEvent.HighlightBlock event) {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
-        if (!ListHandler.isToolAllowed(player.getMainHandItem())) {
+        if (!ClientConfig.enableOutline.get() || !ListHandler.isToolAllowed(player.getMainHandItem())) {
             return;
         }
 
