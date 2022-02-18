@@ -1,9 +1,9 @@
 package de.melanx.excavar.api.shape;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.melanx.excavar.Excavar;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.Map;
