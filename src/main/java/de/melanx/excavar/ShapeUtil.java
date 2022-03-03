@@ -14,9 +14,9 @@ public class ShapeUtil {
         Type configured = ConfigHandler.allowedBlocks.get();
         return switch (configured) {
             case ALL -> true;
-            case ORES_AND_LOGS -> Tags.Blocks.ORES.contains(state.getBlock()) || BlockTags.LOGS.contains(state.getBlock());
-            case ORES -> Tags.Blocks.ORES.contains(state.getBlock());
-            case LOGS -> BlockTags.LOGS.contains(state.getBlock());
+            case ORES_AND_LOGS -> state.is(Tags.Blocks.ORES) || state.is(BlockTags.LOGS);
+            case ORES -> state.is(Tags.Blocks.ORES);
+            case LOGS -> state.is(BlockTags.LOGS);
         };
     }
 
