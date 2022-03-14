@@ -26,8 +26,8 @@ public class DiggingNetwork {
                 new ResourceLocation(Excavar.MODID, "netchannel"),
                 () -> NET_VERSION,
                 // allow joining if mod is not installed on client/server
-                s -> NET_VERSION.equals(s) || NetworkRegistry.ACCEPTVANILLA.equals(s),
-                s -> NET_VERSION.equals(s) || NetworkRegistry.ACCEPTVANILLA.equals(s)
+                s -> NET_VERSION.equals(s) || NetworkRegistry.ABSENT.equals(s) || NetworkRegistry.ACCEPTVANILLA.equals(s),
+                s -> NET_VERSION.equals(s) || NetworkRegistry.ABSENT.equals(s) || NetworkRegistry.ACCEPTVANILLA.equals(s)
         );
     }
 
