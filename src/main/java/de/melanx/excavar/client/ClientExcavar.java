@@ -4,6 +4,7 @@ import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.PlayerHandler;
+import de.melanx.excavar.api.shape.Shape;
 import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.config.ListHandler;
 import net.minecraft.ChatFormatting;
@@ -35,7 +36,7 @@ public class ClientExcavar {
 
     public static final KeyMapping EXCAVAR = new KeyMapping(Excavar.MODID + ".key.excavar", GLFW.GLFW_KEY_LEFT_ALT, "Excavar");
     private BlockHighlighter blockHighlighter = null;
-    private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState(), ItemStack.EMPTY);
+    private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState(), null, null);
 
     public ClientExcavar() {
         ClientRegistry.registerKeyBinding(EXCAVAR);
@@ -101,10 +102,11 @@ public class ClientExcavar {
         }
 
         if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get())) {
-            if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem()) || this.blockHighlighter == null) {
+            if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape())) || this.blockHighlighter == null) {
                 this.blockHighlighter = new BlockHighlighter(hitResult);
-                this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem());
+                this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape()));
             }
+
             this.blockHighlighter.render(event.getLevelRenderer(), event.getPoseStack());
         } else {
             this.blockHighlighter = null;
@@ -127,11 +129,11 @@ public class ClientExcavar {
         }
     }
 
-    private record Matcher(@Nonnull BlockPos pos, @Nonnull Direction side, @Nonnull BlockState state, @Nonnull
-    ItemStack tool) {
+    private record Matcher(@Nonnull BlockPos pos, Direction side, @Nonnull BlockState state,
+                           ItemStack tool, Shape shape) {
 
-        public boolean matches(BlockPos otherPos, Direction /* hello from the */ otherSide, BlockState state, ItemStack tool) {
-            return this.pos.equals(otherPos) && this.side == otherSide && this.state.equals(state) && this.tool == tool;
+        public boolean matches(BlockPos otherPos, Direction /* hello from the */ otherSide, BlockState state, ItemStack tool, Shape shape) {
+            return this.pos.equals(otherPos) && this.side == otherSide && this.state.equals(state) && this.tool == tool && this.shape == shape;
         }
     }
 }
