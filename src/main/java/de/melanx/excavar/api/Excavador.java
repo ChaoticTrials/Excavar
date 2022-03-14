@@ -132,10 +132,11 @@ public class Excavador {
         }
 
         for (BlockPos pos : this.blocksToMine) {
-            player.gameMode.destroyBlock(pos);
             if (tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt && !player.isCreative()) {
                 break;
             }
+
+            player.gameMode.destroyBlock(pos);
         }
     }
 
