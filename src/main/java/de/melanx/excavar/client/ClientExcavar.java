@@ -16,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,7 +35,7 @@ public class ClientExcavar {
 
     public static final KeyMapping EXCAVAR = new KeyMapping(Excavar.MODID + ".key.excavar", GLFW.GLFW_KEY_LEFT_ALT, "Excavar");
     private BlockHighlighter blockHighlighter = null;
-    private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState());
+    private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState(), ItemStack.EMPTY);
 
     public ClientExcavar() {
         ClientRegistry.registerKeyBinding(EXCAVAR);
@@ -100,9 +101,9 @@ public class ClientExcavar {
         }
 
         if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get())) {
-            if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state) || this.blockHighlighter == null) {
+            if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem()) || this.blockHighlighter == null) {
                 this.blockHighlighter = new BlockHighlighter(hitResult);
-                this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state);
+                this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem());
             }
             this.blockHighlighter.render(event.getLevelRenderer(), event.getPoseStack());
         } else {
@@ -126,10 +127,11 @@ public class ClientExcavar {
         }
     }
 
-    private record Matcher(@Nonnull BlockPos pos, @Nonnull Direction side, @Nonnull BlockState state) {
+    private record Matcher(@Nonnull BlockPos pos, @Nonnull Direction side, @Nonnull BlockState state, @Nonnull
+    ItemStack tool) {
 
-        public boolean matches(BlockPos otherPos, Direction /* hello from the */ otherSide, BlockState state) {
-            return this.pos.equals(otherPos) && this.side == otherSide && this.state.equals(state);
+        public boolean matches(BlockPos otherPos, Direction /* hello from the */ otherSide, BlockState state, ItemStack tool) {
+            return this.pos.equals(otherPos) && this.side == otherSide && this.state.equals(state) && this.tool == tool;
         }
     }
 }
