@@ -17,10 +17,9 @@ public class KeyPress {
                 return;
             }
 
-            if (msg.pressed) {
-                Excavar.getPlayerHandler().addPlayer(msg.playerId, msg.data);
-            } else {
-                Excavar.getPlayerHandler().removePlayer(msg.playerId);
+            switch (msg.type) {
+                case PRESS, UPDATE -> Excavar.getPlayerHandler().putPlayer(msg.playerId, msg.data);
+                case RELEASE -> Excavar.getPlayerHandler().removePlayer(msg.playerId);
             }
         });
         ctx.setPacketHandled(true);
@@ -30,17 +29,27 @@ public class KeyPress {
 
         public void encode(Message msg, FriendlyByteBuf buffer) {
             buffer.writeUUID(msg.playerId);
-            buffer.writeBoolean(msg.pressed);
+            buffer.writeEnum(msg.type);
             buffer.writeBoolean(msg.data.requiresSneaking());
             buffer.writeBoolean(msg.data.preventToolBreaking());
             buffer.writeResourceLocation(msg.data.shapeId());
         }
 
         public Message decode(FriendlyByteBuf buffer) {
-            return new Message(buffer.readUUID(), buffer.readBoolean(), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readResourceLocation()));
+            return new Message(buffer.readUUID(), buffer.readEnum(Type.class), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readResourceLocation()));
         }
     }
 
-    public record Message(UUID playerId, boolean pressed, PlayerHandler.ClientData data) {
+    public record Message(UUID playerId, Type type, PlayerHandler.ClientData data) {
+
+        public Message(UUID playerId, Type type) {
+            this(playerId, type, PlayerHandler.ClientData.EMPTY);
+        }
+    }
+
+    public enum Type {
+        PRESS,
+        RELEASE,
+        UPDATE
     }
 }

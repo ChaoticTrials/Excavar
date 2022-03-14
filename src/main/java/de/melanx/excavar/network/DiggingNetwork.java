@@ -16,7 +16,7 @@ import java.util.Optional;
 // https://github.com/noeppi-noeppi/LibX/blob/405e75973b247cd3374a420b4127bb59d28417d5/src/main/java/io/github/noeppi_noeppi/libx/network/NetworkX.java
 public class DiggingNetwork {
 
-    private static final String NET_VERSION = "1.4";
+    private static final String NET_VERSION = "1.5";
 
     private final SimpleChannel channel;
     private int id = 0;
@@ -33,13 +33,19 @@ public class DiggingNetwork {
 
     public void press(Player player, PlayerHandler.ClientData data) {
         if (player instanceof LocalPlayer localPlayer && this.channel.isRemotePresent(localPlayer.connection.getConnection())) {
-            this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), true, data));
+            this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), KeyPress.Type.PRESS, data));
         }
     }
 
     public void release(Player player) {
         if (player instanceof LocalPlayer localPlayer && this.channel.isRemotePresent(localPlayer.connection.getConnection())) {
-            this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), false, PlayerHandler.ClientData.EMPTY));
+            this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), KeyPress.Type.RELEASE));
+        }
+    }
+
+    public void update(Player player, PlayerHandler.ClientData data) {
+        if (player instanceof LocalPlayer localPlayer && this.channel.isRemotePresent(localPlayer.connection.getConnection())) {
+            this.channel.sendToServer(new KeyPress.Message(player.getGameProfile().getId(), KeyPress.Type.UPDATE, data));
         }
     }
 

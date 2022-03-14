@@ -48,13 +48,18 @@ public class PlayerHandler {
         return data == null ? Shapes.getSelectedShape() : data.shapeId();
     }
 
+    @Deprecated(forRemoval = true)
+    public void addPlayer(UUID id, ClientData data) {
+        this.putPlayer(id, data);
+    }
+
     /**
      * Adds a player to the players which could use it.
      *
      * @param id   The {@link UUID} of the player
      * @param data The {@link ClientData} of the player
      */
-    public void addPlayer(UUID id, ClientData data) {
+    public void putPlayer(UUID id, ClientData data) {
         this.players.put(id, data);
     }
 

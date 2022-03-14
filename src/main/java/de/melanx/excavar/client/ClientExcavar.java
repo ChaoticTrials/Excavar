@@ -71,7 +71,8 @@ public class ClientExcavar {
             return;
         }
 
-        if (EXCAVAR.isDown() && Screen.hasShiftDown() && Minecraft.getInstance().player != null && Minecraft.getInstance().screen == null) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (EXCAVAR.isDown() && Screen.hasShiftDown() && player != null && Minecraft.getInstance().screen == null) {
             ResourceLocation prevId = Shapes.getSelectedShape();
             ResourceLocation id;
             if (event.getScrollDelta() > 0) {
@@ -81,6 +82,9 @@ public class ClientExcavar {
             }
 
             if (prevId != id) {
+                PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), id);
+                Excavar.getNetwork().update(player, data);
+                Excavar.getPlayerHandler().putPlayer(player.getGameProfile().getId(), data);
                 event.setCanceled(true);
             }
         }
@@ -122,7 +126,7 @@ public class ClientExcavar {
         if (action == GLFW.GLFW_PRESS) {
             PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), Shapes.getSelectedShape());
             Excavar.getNetwork().press(player, data);
-            Excavar.getPlayerHandler().addPlayer(player.getGameProfile().getId(), data);
+            Excavar.getPlayerHandler().putPlayer(player.getGameProfile().getId(), data);
         } else if (action == GLFW.GLFW_RELEASE) {
             Excavar.getNetwork().release(player);
             Excavar.getPlayerHandler().removePlayer(player.getGameProfile().getId());
