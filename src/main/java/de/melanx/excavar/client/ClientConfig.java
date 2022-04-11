@@ -15,6 +15,7 @@ public class ClientConfig {
     public static ForgeConfigSpec.BooleanValue onlyWhileSneaking;
     public static ForgeConfigSpec.BooleanValue preventToolsBreaking;
     public static ForgeConfigSpec.BooleanValue enableOutline;
+    public static ForgeConfigSpec.BooleanValue considerDurability;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         onlyWhileSneaking = builder.comment("If set to true, you need to sneak.")
@@ -24,5 +25,7 @@ public class ClientConfig {
                 .define("preventBreaking", true);
         enableOutline = builder.comment("Should an outline be drawn when holding key to break multiple blocks?")
                 .define("enableOutline", true);
+        considerDurability = builder.comment("Should the tool's durability be considered when breaking blocks? If having enchantments like Unbreaking, this could show a wrong amount.")
+                .define("considerDurability", false);
     }
 }

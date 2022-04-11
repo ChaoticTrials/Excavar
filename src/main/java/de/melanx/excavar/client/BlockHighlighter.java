@@ -47,7 +47,11 @@ public class BlockHighlighter {
 
     private VoxelShape shape() {
         if (this.shape == null) {
-            this.excavador.findBlocks();
+            //noinspection ConstantConditions
+            int maxBlocks = ClientConfig.considerDurability.get()
+                    ? Minecraft.getInstance().player.getMainHandItem().getMaxDamage() - Minecraft.getInstance().player.getMainHandItem().getDamageValue() - (ClientConfig.preventToolsBreaking.get() ? 2 : 1) // we need to increase this by 1, otherwise it would display 1 block too much
+                    : Integer.MAX_VALUE;
+            this.excavador.findBlocks(maxBlocks);
             List<VoxelShape> allShapes = Lists.newArrayList();
             for (BlockPos pos : this.excavador.getBlocksToMine()) {
                 VoxelShape blockShape = this.excavador.level.getBlockState(pos).getVisualShape(this.excavador.level, pos, CollisionContext.empty());

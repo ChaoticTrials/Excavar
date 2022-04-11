@@ -91,12 +91,16 @@ public class Excavador {
         this.shape = Shapes.getShape(shapeId);
     }
 
+    public void findBlocks() {
+        this.findBlocks(Integer.MAX_VALUE);
+    }
+
     /**
      * Searches for the {@link BlockPos}es to break if not already searched.
      */
-    public void findBlocks() {
+    public void findBlocks(int maxBlocks) {
         if (!this.blocksToMine.isEmpty()) return;
-        int limit = ConfigHandler.blockLimit.get();
+        int limit = Math.min(maxBlocks, ConfigHandler.blockLimit.get());
         this.blocksToMine.add(this.start);
         Set<BlockPos> usedBlocks = Sets.newHashSet();
         limit--;
@@ -126,7 +130,7 @@ public class Excavador {
      * @param tool The tool which will be used to mine all the blocks
      */
     public void mine(ItemStack tool) {
-        int stopAt = this.preventToolBreaking ? 2 : 1;
+        int stopAt = this.preventToolBreaking ? 2 : 1; // we need to increase this by 1, otherwise the tool will be broken to early
         if (!(this.player instanceof ServerPlayer player)) {
             throw new IllegalStateException("Can't mine on client side");
         }
