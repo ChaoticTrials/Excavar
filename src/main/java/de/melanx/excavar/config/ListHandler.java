@@ -45,6 +45,6 @@ public class ListHandler {
     }
 
     public static boolean isToolAllowed(Item item) {
-        return !TOOL_DENY_LIST.contains(item.getRegistryName());
+        return !TOOL_DENY_LIST.contains(ForgeRegistries.ITEMS.getKey(item));
     }
 }

@@ -14,7 +14,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -52,8 +53,8 @@ public class ClientExcavar {
 
         if (EXCAVAR.isDown() && Screen.hasShiftDown() && Minecraft.getInstance().player != null) {
             ResourceLocation id = Shapes.getSelectedShape();
-            TranslatableComponent msg = new TranslatableComponent("excavar.shape.selected");
-            msg.append(new TranslatableComponent(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
+            MutableComponent msg = Component.translatable("excavar.shape.selected");
+            msg.append(Component.translatable(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
             Minecraft.getInstance().player.displayClientMessage(msg, true);
         }
     }
