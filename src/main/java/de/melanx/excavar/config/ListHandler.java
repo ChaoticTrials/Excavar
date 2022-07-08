@@ -16,7 +16,13 @@ public class ListHandler {
     private static final Set<ResourceLocation> TOOL_DENY_LIST = Sets.newHashSet();
 
     public static void refreshLists() {
-        String[] deniedTools = ConfigHandler.deniedTools.get().toArray(new String[0]);
+        String[] deniedTools;
+
+        try {
+            deniedTools = ConfigHandler.deniedTools.get().toArray(new String[0]);
+        } catch (IllegalStateException e) {
+            deniedTools = ConfigHandler.deniedTools.getDefault().toArray(new String[0]);
+        }
         TOOL_DENY_LIST.clear();
 
         for (String s : deniedTools) {

@@ -16,7 +16,7 @@ A lightweight excavation mod for modern Minecraft versions
 [[dependencies.excavar]]
     modId="forge"
     mandatory=true
-    versionRange="[41.0,)"
+    versionRange="[41.0.64,)"
     ordering="NONE"
     side="BOTH"
 

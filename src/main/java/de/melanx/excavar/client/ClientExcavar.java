@@ -22,9 +22,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -40,13 +40,17 @@ public class ClientExcavar {
     private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState(), null, null);
 
     public ClientExcavar() {
-        ClientRegistry.registerKeyBinding(EXCAVAR);
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG);
     }
 
     @SubscribeEvent
-    public void keyInput(InputEvent.KeyInputEvent event) {
+    public void onRegisterKeys(RegisterKeyMappingsEvent event) {
+        event.register(EXCAVAR);
+    }
+
+    @SubscribeEvent
+    public void keyInput(InputEvent.Key event) {
         if (event.getKey() == EXCAVAR.getKey().getValue()) {
             ClientExcavar.handleInput(event.getAction());
         }
@@ -60,14 +64,14 @@ public class ClientExcavar {
     }
 
     @SubscribeEvent
-    public void mouseInput(InputEvent.MouseInputEvent event) {
+    public void mouseInput(InputEvent.MouseButton event) {
         if (event.getButton() == EXCAVAR.getKey().getValue()) {
             ClientExcavar.handleInput(event.getAction());
         }
     }
 
     @SubscribeEvent
-    public void mouseScroll(InputEvent.MouseScrollEvent event) {
+    public void mouseScroll(InputEvent.MouseScrollingEvent event) {
         if (!ConfigHandler.allowShapeSelection.get()) {
             return;
         }
@@ -92,7 +96,7 @@ public class ClientExcavar {
     }
 
     @SubscribeEvent
-    public void renderBlockHighlights(DrawSelectionEvent.HighlightBlock event) {
+    public void renderBlockHighlights(RenderHighlightEvent.Block event) {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
         if (!ClientConfig.enableOutline.get() || !ListHandler.isToolAllowed(player.getMainHandItem())) {
