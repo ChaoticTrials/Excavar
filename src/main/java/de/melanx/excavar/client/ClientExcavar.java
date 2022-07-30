@@ -29,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
@@ -42,9 +43,9 @@ public class ClientExcavar {
     public ClientExcavar() {
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeys);
     }
 
-    @SubscribeEvent
     public void onRegisterKeys(RegisterKeyMappingsEvent event) {
         event.register(EXCAVAR);
     }
