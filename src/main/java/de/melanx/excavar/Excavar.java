@@ -15,7 +15,6 @@ import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -36,7 +35,7 @@ public class Excavar {
         playerHandler = new PlayerHandler();
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigHandler.SERVER_CONFIG);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onConfigChange);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ListHandler::onConfigChange);
         MinecraftForge.EVENT_BUS.register(new EventListener());
         if (FMLEnvironment.dist == Dist.CLIENT) {
             new ClientExcavar();
@@ -51,10 +50,6 @@ public class Excavar {
         Shapes.register(Shapes.EASY_SHAPELESS, new EasyShapeless(), false);
         Shapes.register(Shapes.PLANTS_SHAPELESS, new PlantsShapeless(), false);
         Shapes.register(Shapes.TUNNEL, new Tunnel());
-    }
-
-    private void onConfigChange(ModConfigEvent event) {
-        ListHandler.refreshLists();
     }
 
     public static DiggingNetwork getNetwork() {
