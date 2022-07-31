@@ -1,6 +1,5 @@
 package de.melanx.excavar.config;
 
-import com.google.common.collect.Sets;
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import net.minecraft.resources.ResourceLocation;
@@ -9,19 +8,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ListHandler {
 
-    private static final Set<ResourceLocation> TOOL_DENY_LIST = Sets.newHashSet();
+    private static Set<ResourceLocation> TOOL_DENY_LIST = null;
 
     private static void validate() {
-        if (!TOOL_DENY_LIST.isEmpty()) {
+        if (TOOL_DENY_LIST != null) {
             return;
         }
 
+        TOOL_DENY_LIST = new HashSet<>();
         Set<Pattern> deniedTools = ConfigHandler.deniedTools.get().stream().map(s -> Pattern.compile("^" + s.replace("*", ".*") + "$")).collect(Collectors.toSet());
         for (Pattern regex : deniedTools) {
             Set<ResourceLocation> itemIds = ForgeRegistries.ITEMS.getKeys();
@@ -36,7 +37,7 @@ public class ListHandler {
 
     public static void onConfigChange(ModConfigEvent event) {
         if (event.getConfig().getModId().equals(Excavar.MODID)) {
-            TOOL_DENY_LIST.clear();
+            TOOL_DENY_LIST = null;
         }
     }
 
