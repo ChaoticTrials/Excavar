@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,7 +32,8 @@ public class EventListener {
                     return;
                 }
 
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) player.level, player, Lists.newArrayList(), state.getBlock()))) {
+                Level level = player.level();
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) level, player, Lists.newArrayList(), state.getBlock()))) {
                     return;
                 }
 
@@ -42,10 +44,10 @@ public class EventListener {
                     shapeId = ShapeUtil.getShapeId(state.getBlock());
                 }
 
-                Excavador excavador = new Excavador(shapeId, event.getPos(), player.level, player, side, state);
+                Excavador excavador = new Excavador(shapeId, event.getPos(), level, player, side, state);
                 excavador.findBlocks();
 
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) player.level, player, excavador.getBlocksToMine(), state.getBlock()))) {
+                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock()))) {
                     playerHandler.stopDigging(playerId);
                     return;
                 }
@@ -53,7 +55,7 @@ public class EventListener {
                 playerHandler.startDigging(playerId);
                 excavador.mine(event.getPlayer().getMainHandItem());
                 playerHandler.stopDigging(playerId);
-                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) player.level, player, excavador.getBlocksToMine(), state.getBlock()));
+                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock()));
             }
         }
     }

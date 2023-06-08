@@ -105,7 +105,7 @@ public class ClientExcavar {
         }
 
         BlockHitResult hitResult = event.getTarget();
-        BlockState state = player.level.getBlockState(hitResult.getBlockPos());
+        BlockState state = player.level().getBlockState(hitResult.getBlockPos());
 
         if (!ShapeUtil.miningAllowed(state)) {
             return;

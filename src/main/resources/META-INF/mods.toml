@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[45,)"
+loaderVersion="[46,)"
 license="The Apache License, Version 2.0"
 issueTrackerURL="https://github.com/MelanX/Excavar/issues"
 
 [[mods]]
 modId="excavar"
-version="${file.jarVersion}"
+version="${version}"
 displayName="Excavar"
 displayURL="https://assets.melanx.de/updates/excavar.json"
 authors="MelanX"
@@ -16,13 +16,13 @@ A lightweight excavation mod for modern Minecraft versions
 [[dependencies.excavar]]
     modId="forge"
     mandatory=true
-    versionRange="[45.0.1,)"
+    versionRange="[${forge},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.excavar]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.4, 1.20)"
+    versionRange="[1.20, 1.21)"
     ordering="NONE"
     side="BOTH"
