@@ -78,7 +78,7 @@ public class PlayerHandler {
      */
     @Nonnull
     public ClientData getData(UUID id) {
-        return this.players.getOrDefault(id, null);
+        return this.players.getOrDefault(id, ClientData.EMPTY);
     }
 
     /**
