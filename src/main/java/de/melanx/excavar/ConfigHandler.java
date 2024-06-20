@@ -1,28 +1,28 @@
 package de.melanx.excavar;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ConfigHandler {
 
-    public static final ForgeConfigSpec SERVER_CONFIG;
-    private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+    public static final ModConfigSpec SERVER_CONFIG;
+    private static final ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
     static {
         init(SERVER_BUILDER);
         SERVER_CONFIG = SERVER_BUILDER.build();
     }
 
-    public static ForgeConfigSpec.IntValue blockLimit;
-    public static ForgeConfigSpec.BooleanValue requiresCorrectTool;
-    public static ForgeConfigSpec.BooleanValue disableDiagonals;
-    public static ForgeConfigSpec.BooleanValue allowShapeSelection;
-    public static ForgeConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> deniedTools;
+    public static ModConfigSpec.IntValue blockLimit;
+    public static ModConfigSpec.BooleanValue requiresCorrectTool;
+    public static ModConfigSpec.BooleanValue disableDiagonals;
+    public static ModConfigSpec.BooleanValue allowShapeSelection;
+    public static ModConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
+    public static ModConfigSpec.ConfigValue<List<? extends String>> deniedTools;
 
-    public static void init(ForgeConfigSpec.Builder builder) {
+    public static void init(ModConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
                 .defineInRange("blocklimit", 16, 2, 8192);
         requiresCorrectTool = builder.comment("If set to true, you need the correct tool to break the blocks.")

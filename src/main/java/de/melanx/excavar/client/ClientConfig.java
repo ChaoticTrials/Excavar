@@ -1,23 +1,23 @@
 package de.melanx.excavar.client;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
 
-    public static final ForgeConfigSpec CLIENT_CONFIG;
-    private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+    public static final ModConfigSpec CLIENT_CONFIG;
+    private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
     static {
         init(CLIENT_BUILDER);
         CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    public static ForgeConfigSpec.BooleanValue onlyWhileSneaking;
-    public static ForgeConfigSpec.BooleanValue preventToolsBreaking;
-    public static ForgeConfigSpec.BooleanValue enableOutline;
-    public static ForgeConfigSpec.BooleanValue considerDurability;
+    public static ModConfigSpec.BooleanValue onlyWhileSneaking;
+    public static ModConfigSpec.BooleanValue preventToolsBreaking;
+    public static ModConfigSpec.BooleanValue enableOutline;
+    public static ModConfigSpec.BooleanValue considerDurability;
 
-    public static void init(ForgeConfigSpec.Builder builder) {
+    public static void init(ModConfigSpec.Builder builder) {
         onlyWhileSneaking = builder.comment("If set to true, you need to sneak.")
                 .define("sneakingRequired", false);
         preventToolsBreaking = builder.comment("Should tools being prevented from breaking? If true, mining will be stopped when durability is 1",

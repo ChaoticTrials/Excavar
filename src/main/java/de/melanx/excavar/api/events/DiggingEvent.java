@@ -4,7 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.ICancellableEvent;
 
 import java.util.List;
 
@@ -55,15 +56,10 @@ public class DiggingEvent extends Event {
      * <p>
      * If canceled, no blocks will be searched, nothing will be broken.
      */
-    public static class Pre extends DiggingEvent {
+    public static class Pre extends DiggingEvent implements ICancellableEvent {
 
         public Pre(ServerLevel level, ServerPlayer player, List<BlockPos> positions, Block block) {
             super(level, player, positions, block);
-        }
-
-        @Override
-        public boolean isCancelable() {
-            return true;
         }
     }
 
@@ -72,16 +68,11 @@ public class DiggingEvent extends Event {
      * <p>
      * If canceled, nothing will be broken.
      */
-    public static class FoundPositions extends DiggingEvent {
+    public static class FoundPositions extends DiggingEvent implements ICancellableEvent {
 
 
         public FoundPositions(ServerLevel level, ServerPlayer player, List<BlockPos> positions, Block block) {
             super(level, player, positions, block);
-        }
-
-        @Override
-        public boolean isCancelable() {
-            return true;
         }
 
     }

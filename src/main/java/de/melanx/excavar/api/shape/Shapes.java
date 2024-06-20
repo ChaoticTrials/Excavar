@@ -12,10 +12,10 @@ public class Shapes {
 
     private final static List<ResourceLocation> selectableShapes = Lists.newArrayList();
     private final static Map<ResourceLocation, Shape> registry = Maps.newHashMap();
-    public static final ResourceLocation SHAPELESS = new ResourceLocation(Excavar.MODID, "shapeless");
-    public static final ResourceLocation EASY_SHAPELESS = new ResourceLocation(Excavar.MODID, "easy_shapeless");
-    public static final ResourceLocation PLANTS_SHAPELESS = new ResourceLocation(Excavar.MODID, "plants_shapeless");
-    public static final ResourceLocation TUNNEL = new ResourceLocation(Excavar.MODID, "tunnel");
+    public static final ResourceLocation SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "shapeless");
+    public static final ResourceLocation EASY_SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "easy_shapeless");
+    public static final ResourceLocation PLANTS_SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "plants_shapeless");
+    public static final ResourceLocation TUNNEL = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "tunnel");
     private static ResourceLocation currentShape = SHAPELESS;
 
     private Shapes() {

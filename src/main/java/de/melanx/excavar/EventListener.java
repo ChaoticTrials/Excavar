@@ -13,9 +13,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class EventListener {
                 }
 
                 Level level = player.level();
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) level, player, Lists.newArrayList(), state.getBlock()))) {
+                if (NeoForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) level, player, Lists.newArrayList(), state.getBlock())).isCanceled()) {
                     return;
                 }
 
@@ -47,7 +47,7 @@ public class EventListener {
                 Excavador excavador = new Excavador(shapeId, event.getPos(), level, player, side, state);
                 excavador.findBlocks();
 
-                if (MinecraftForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock()))) {
+                if (NeoForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock())).isCanceled()) {
                     playerHandler.stopDigging(playerId);
                     return;
                 }
@@ -55,7 +55,7 @@ public class EventListener {
                 playerHandler.startDigging(playerId);
                 excavador.mine(event.getPlayer().getMainHandItem());
                 playerHandler.stopDigging(playerId);
-                MinecraftForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock()));
+                NeoForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock()));
             }
         }
     }

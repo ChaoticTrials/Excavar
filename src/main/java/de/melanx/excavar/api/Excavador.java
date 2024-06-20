@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -107,7 +107,7 @@ public class Excavador {
         BlockPos start = this.start;
 
         // find only start block when it's not the correct tool, but it's required via config
-        if (this.requiresCorrectTool && !ForgeHooks.isCorrectToolForDrops(this.level.getBlockState(start), this.player)) {
+        if (this.requiresCorrectTool && !EventHooks.doPlayerHarvestCheck(this.player, this.level.getBlockState(start), this.level, start)) {
             return;
         }
 
@@ -130,7 +130,7 @@ public class Excavador {
      * @param tool The tool which will be used to mine all the blocks
      */
     public void mine(ItemStack tool) {
-        int stopAt = this.preventToolBreaking ? 2 : 1; // we need to increase this by 1, otherwise the tool will be broken to early
+        int stopAt = this.preventToolBreaking ? 2 : 1; // we need to increase this by 1, otherwise the tool will be broken too early
         if (!(this.player instanceof ServerPlayer player)) {
             throw new IllegalStateException("Can't mine on client side");
         }

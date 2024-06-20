@@ -50,7 +50,10 @@ public class BlockHighlighter {
         if (this.shape == null) {
             //noinspection ConstantConditions
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
-            int maxBlocks = (ClientConfig.considerDurability.get() && heldItem.isDamageableItem()) ? heldItem.getMaxDamage() - heldItem.getDamageValue() - (ClientConfig.preventToolsBreaking.get() ? 2 : 1) // we need to increase this by 1, otherwise it would display 1 block too much
+            int maxBlocks = (ClientConfig.considerDurability.get() && heldItem.isDamageableItem())
+                    ? heldItem.getMaxDamage() - heldItem.getDamageValue() - (ClientConfig.preventToolsBreaking.get()
+                    ? 2
+                    : 1) // we need to increase this by 1, otherwise it would display 1 block too much
                     : Integer.MAX_VALUE;
             this.excavador.findBlocks(maxBlocks);
             List<VoxelShape> allShapes = Lists.newArrayList();

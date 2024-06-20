@@ -7,6 +7,7 @@ import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.shape.Shape;
 import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.config.ListHandler;
+import de.melanx.excavar.network.DiggingNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -22,28 +23,31 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 
+@Mod(value = Excavar.MODID, dist = Dist.CLIENT)
 public class ClientExcavar {
 
     public static final KeyMapping EXCAVAR = new KeyMapping(Excavar.MODID + ".key.excavar", GLFW.GLFW_KEY_LEFT_ALT, "Excavar");
     private BlockHighlighter blockHighlighter = null;
     private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState(), null, null);
 
-    public ClientExcavar() {
-        MinecraftForge.EVENT_BUS.register(this);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeys);
+    public ClientExcavar(IEventBus bus, ModContainer modContainer) {
+        NeoForge.EVENT_BUS.register(this);
+        bus.addListener(this::onRegisterKeys);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG);
     }
 
     public void onRegisterKeys(RegisterKeyMappingsEvent event) {
@@ -52,7 +56,7 @@ public class ClientExcavar {
 
     @SubscribeEvent
     public void keyInput(InputEvent.Key event) {
-        if (event.getKey() == EXCAVAR.getKey().getValue()) {
+        if (EXCAVAR.consumeClick()) {
             ClientExcavar.handleInput(event.getAction());
         }
 
@@ -65,8 +69,8 @@ public class ClientExcavar {
     }
 
     @SubscribeEvent
-    public void mouseInput(InputEvent.MouseButton event) {
-        if (event.getButton() == EXCAVAR.getKey().getValue()) {
+    public void mouseInput(InputEvent.MouseButton.Pre event) {
+        if (EXCAVAR.consumeClick()) {
             ClientExcavar.handleInput(event.getAction());
         }
     }
@@ -81,7 +85,7 @@ public class ClientExcavar {
         if (EXCAVAR.isDown() && Screen.hasShiftDown() && player != null && Minecraft.getInstance().screen == null) {
             ResourceLocation prevId = Shapes.getSelectedShape();
             ResourceLocation id;
-            if (event.getScrollDelta() > 0) {
+            if (event.getScrollDeltaY() > 0) {
                 id = Shapes.previousShapeId();
             } else {
                 id = Shapes.nextShapeId();
@@ -89,7 +93,7 @@ public class ClientExcavar {
 
             if (prevId != id) {
                 PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), id);
-                Excavar.getNetwork().update(player, data);
+                DiggingNetwork.update(player, data);
                 Excavar.getPlayerHandler().putPlayer(player.getGameProfile().getId(), data);
                 event.setCanceled(true);
             }
@@ -131,10 +135,10 @@ public class ClientExcavar {
 
         if (action == GLFW.GLFW_PRESS) {
             PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), Shapes.getSelectedShape());
-            Excavar.getNetwork().press(player, data);
+            DiggingNetwork.press(player, data);
             Excavar.getPlayerHandler().putPlayer(player.getGameProfile().getId(), data);
         } else if (action == GLFW.GLFW_RELEASE) {
-            Excavar.getNetwork().release(player);
+            DiggingNetwork.release(player);
             Excavar.getPlayerHandler().removePlayer(player.getGameProfile().getId());
         }
     }

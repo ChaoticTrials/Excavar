@@ -86,7 +86,7 @@ public class PlayerHandler {
      */
     public record ClientData(boolean requiresSneaking, boolean preventToolBreaking, ResourceLocation shapeId) {
 
-        private static final ResourceLocation MISSINGNO = new ResourceLocation("minecraft", "missingno");
+        private static final ResourceLocation MISSINGNO = ResourceLocation.fromNamespaceAndPath("minecraft", "missingno");
         public static final ClientData EMPTY = new ClientData(false, false, MISSINGNO);
     }
 }

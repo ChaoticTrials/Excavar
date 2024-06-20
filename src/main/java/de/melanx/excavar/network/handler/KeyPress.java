@@ -3,51 +3,53 @@ package de.melanx.excavar.network.handler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.PlayerHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-public class KeyPress {
+public record KeyPress(UUID playerId, PressType pressType, PlayerHandler.ClientData data) implements CustomPacketPayload {
 
-    public static void handle(Message msg, Supplier<NetworkEvent.Context> context) {
-        NetworkEvent.Context ctx = context.get();
-        ctx.enqueueWork(() -> {
-            if (ctx.getSender() == null) {
-                return;
-            }
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "key_press");
+    public static final CustomPacketPayload.Type<KeyPress> TYPE = new CustomPacketPayload.Type<>(ID);
 
-            switch (msg.type) {
-                case PRESS, UPDATE -> Excavar.getPlayerHandler().putPlayer(msg.playerId, msg.data);
-                case RELEASE -> Excavar.getPlayerHandler().removePlayer(msg.playerId);
+    public KeyPress(UUID playerId, PressType pressType) {
+        this(playerId, pressType, PlayerHandler.ClientData.EMPTY);
+    }
+
+    public static final StreamCodec<FriendlyByteBuf, KeyPress> CODEC = StreamCodec.of(
+            KeyPress::encode, KeyPress::decode
+    );
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
+    public void handle(IPayloadContext context) {
+        context.enqueueWork(() -> {
+            switch (this.pressType) {
+                case PRESS, UPDATE -> Excavar.getPlayerHandler().putPlayer(this.playerId, this.data);
+                case RELEASE -> Excavar.getPlayerHandler().removePlayer(this.playerId);
             }
         });
-        ctx.setPacketHandled(true);
     }
 
-    public static class Serializer {
-
-        public void encode(Message msg, FriendlyByteBuf buffer) {
-            buffer.writeUUID(msg.playerId);
-            buffer.writeEnum(msg.type);
-            buffer.writeBoolean(msg.data.requiresSneaking());
-            buffer.writeBoolean(msg.data.preventToolBreaking());
-            buffer.writeResourceLocation(msg.data.shapeId());
-        }
-
-        public Message decode(FriendlyByteBuf buffer) {
-            return new Message(buffer.readUUID(), buffer.readEnum(Type.class), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readResourceLocation()));
-        }
+    private static void encode(FriendlyByteBuf buffer, KeyPress msg) {
+        buffer.writeUUID(msg.playerId);
+        buffer.writeEnum(msg.pressType);
+        buffer.writeBoolean(msg.data.requiresSneaking());
+        buffer.writeBoolean(msg.data.preventToolBreaking());
+        buffer.writeResourceLocation(msg.data.shapeId());
     }
 
-    public record Message(UUID playerId, Type type, PlayerHandler.ClientData data) {
-
-        public Message(UUID playerId, Type type) {
-            this(playerId, type, PlayerHandler.ClientData.EMPTY);
-        }
+    private static KeyPress decode(FriendlyByteBuf buffer) {
+        return new KeyPress(buffer.readUUID(), buffer.readEnum(PressType.class), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readResourceLocation()));
     }
 
-    public enum Type {
+    public enum PressType {
         PRESS,
         RELEASE,
         UPDATE
