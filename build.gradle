@@ -239,6 +239,10 @@ String changelog(Project project) {
     def stdout = new ByteArrayOutputStream()
     def gitHash = System.getenv('GIT_COMMIT')
     def gitPrevHash = System.getenv('GIT_PREVIOUS_COMMIT')
+    if (gitPrevHash == "0000000000000000000000000000000000000000") {
+        gitPrevHash = "HEAD~1"
+    }
+
     if (gitHash != null && gitPrevHash != null) {
         exec {
             commandLine 'git', 'log', logFmt, '' + gitPrevHash + '...' + gitHash

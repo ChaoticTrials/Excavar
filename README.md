@@ -1,8 +1,8 @@
 # Excavar
 A lightweight excavation mod for modern Minecraft versions
 
-[![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_561528_all.svg)](https://www.curseforge.com/minecraft/mc-mods/excavar)
-[![CurseForge](http://cf.way2muchnoise.eu/full_561528_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/excavar)
+[![Modrinth](https://badges.moddingx.org/modrinth/versions/u86oU2cO)](https://modrinth.com/mod/excavar)
+[![Modrinth](https://badges.moddingx.org/modrinth/downloads/u86oU2cO)](https://modrinth.com/mod/excavar)
 
-[![Modrinth](https://img.shields.io/modrinth/game-versions/u86oU2cO?color=00AF5C&label=modrinth&logo=modrinth)](https://modrinth.com/mod/excavar)
-[![Modrinth](https://img.shields.io/modrinth/dt/u86oU2cO?color=00AF5C&logo=modrinth)](https://modrinth.com/mod/excavar)
+[![Curseforge](https://badges.moddingx.org/curseforge/versions/561528)](https://www.curseforge.com/minecraft/mc-mods/excavar)
+[![CurseForge](https://badges.moddingx.org/curseforge/downloads/561528)](https://www.curseforge.com/minecraft/mc-mods/excavar)
