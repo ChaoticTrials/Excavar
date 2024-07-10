@@ -22,6 +22,7 @@ public class ConfigHandler {
     public static ForgeConfigSpec.BooleanValue disableDiagonals;
     public static ForgeConfigSpec.BooleanValue allowShapeSelection;
     public static ForgeConfigSpec.BooleanValue fistForbidden;
+    public static ForgeConfigSpec.BooleanValue invertForbiddenTag;
     public static ForgeConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> deniedTools;
 
@@ -41,6 +42,8 @@ public class ConfigHandler {
                 .define("allowShapeSelection", true);
         fistForbidden = builder.comment("If user helds no item, it will not multi-mine")
                 .define("fistForbidden", false);
+        invertForbiddenTag = builder.comment("Inverts the block tag 'excavar:forbidden_blocks' to allow only these")
+                .define("invertForbiddenTag", false);
         allowedBlocks = builder.comment("Defines which blocks can be mined with Excavar")
                 .defineEnum("allowedBlocks", ShapeUtil.Type.ALL);
         deniedTools = builder.comment("A list of tools which aren't allowed.",
