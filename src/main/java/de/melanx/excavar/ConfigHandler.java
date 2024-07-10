@@ -21,6 +21,7 @@ public class ConfigHandler {
     public static ModConfigSpec.BooleanValue requiresCorrectTool;
     public static ModConfigSpec.BooleanValue disableDiagonals;
     public static ModConfigSpec.BooleanValue allowShapeSelection;
+    public static ModConfigSpec.BooleanValue fistForbidden;
     public static ModConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
     public static ModConfigSpec.ConfigValue<List<? extends String>> deniedTools;
 
@@ -38,6 +39,8 @@ public class ConfigHandler {
                 .define("disableDiagonals", false);
         allowShapeSelection = builder.comment("If set to true, the player will be able to change shapes.")
                 .define("allowShapeSelection", true);
+        fistForbidden = builder.comment("If user helds no item, it will not multi-mine")
+                .define("fistForbidden", false);
         allowedBlocks = builder.comment("Defines which blocks can be mined with Excavar")
                 .defineEnum("allowedBlocks", ShapeUtil.Type.ALL);
         deniedTools = builder.comment("A list of tools which aren't allowed.",
