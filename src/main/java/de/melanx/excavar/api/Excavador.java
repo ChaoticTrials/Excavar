@@ -108,7 +108,8 @@ public class Excavador {
         BlockPos start = this.start;
 
         // find only start block when it's not the correct tool, but it's required via config
-        if (this.requiresCorrectTool && !ForgeHooks.isCorrectToolForDrops(this.level.getBlockState(start), this.player)) {
+        if (this.requiresCorrectTool && (!ForgeHooks.isCorrectToolForDrops(this.level.getBlockState(start), this.player)
+                || (ConfigHandler.fistForbidden.get() && this.player.getMainHandItem().isEmpty() && this.level.getBlockState(start).getDestroySpeed(this.level, start) > 1))) {
             return;
         }
 
