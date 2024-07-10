@@ -43,8 +43,6 @@ neoForge {
         mappingsVersion = project.parchment_mappings_version
     }
 
-    accessTransformers.add('src/main/resources/META-INF/accesstransformer.cfg')
-
     runs {
         client {
             client()

@@ -16,6 +16,8 @@ public class ConfigHandler {
     }
 
     public static ModConfigSpec.IntValue blockLimit;
+    public static ModConfigSpec.IntValue xpUsage;
+    public static ModConfigSpec.DoubleValue hungerUsage;
     public static ModConfigSpec.BooleanValue requiresCorrectTool;
     public static ModConfigSpec.BooleanValue disableDiagonals;
     public static ModConfigSpec.BooleanValue allowShapeSelection;
@@ -25,6 +27,10 @@ public class ConfigHandler {
     public static void init(ModConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
                 .defineInRange("blocklimit", 16, 2, 8192);
+        xpUsage = builder.comment("How much xp points will be used for one block")
+                .defineInRange("xpUsage", 0, 0, 1000);
+        hungerUsage = builder.comment("How much food exhaustion will caused by one block")
+                .defineInRange("hungerUsage", 0.005, 0, 1000);
         requiresCorrectTool = builder.comment("If set to true, you need the correct tool to break the blocks.")
                 .define("requiresCorrectTool", true);
         disableDiagonals = builder.comment("If set to true, blocks will only be found on the 6 sides on each block.",

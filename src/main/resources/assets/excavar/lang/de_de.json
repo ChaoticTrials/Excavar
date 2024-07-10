@@ -2,5 +2,7 @@
   "excavar.key.excavar": "Mehrfachabbau",
   "excavar.shape.selected": "Ausgewählte Form: ",
   "excavar.shape.shapeless.desc": "Formlos",
-  "excavar.shape.tunnel.desc": "Tunnel"
+  "excavar.shape.tunnel.desc": "Tunnel",
+
+  "excavar.config.xp_usage.missing": "Du brauchst weitere %s XP, um alle Blöcke abzubauen."
 }
