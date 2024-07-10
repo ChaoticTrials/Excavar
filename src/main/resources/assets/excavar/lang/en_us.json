@@ -2,5 +2,7 @@
   "excavar.key.excavar": "Multimine",
   "excavar.shape.selected": "Selected shape: ",
   "excavar.shape.shapeless.desc": "Shapeless",
-  "excavar.shape.tunnel.desc": "Tunnel"
+  "excavar.shape.tunnel.desc": "Tunnel",
+
+  "excavar.config.xp_usage.missing": "You need additional %s xp to mine all blocks."
 }

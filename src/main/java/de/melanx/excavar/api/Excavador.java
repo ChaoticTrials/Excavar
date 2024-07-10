@@ -8,6 +8,7 @@ import de.melanx.excavar.api.shape.Shape;
 import de.melanx.excavar.api.shape.Shapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -130,17 +131,33 @@ public class Excavador {
      * @param tool The tool which will be used to mine all the blocks
      */
     public void mine(ItemStack tool) {
+        int xp = Excavador.getExpPoints(this.player.experienceLevel, this.player.experienceProgress);
         int stopAt = this.preventToolBreaking ? 2 : 1; // we need to increase this by 1, otherwise the tool will be broken to early
         if (!(this.player instanceof ServerPlayer player)) {
             throw new IllegalStateException("Can't mine on client side");
         }
 
+        int i = 0;
         for (BlockPos pos : this.blocksToMine) {
-            if (tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt && !player.isCreative()) {
+            boolean tooLessXp = xp - ConfigHandler.xpUsage.get() < 0;
+            if ((tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt || tooLessXp) && !player.isCreative()) {
+                if (tooLessXp) {
+                    player.sendSystemMessage(Component.translatable("excavar.config.xp_usage.missing", this.blocksToMine.size() - i - ConfigHandler.xpUsage.get()));
+                }
+
                 break;
             }
 
             player.gameMode.destroyBlock(pos);
+            player.causeFoodExhaustion((float) (ConfigHandler.hungerUsage.get() - 0.005F));
+
+            // prevent xp usage for first block
+            if (i >= 1) {
+                player.giveExperiencePoints(-ConfigHandler.xpUsage.get());
+                xp -= ConfigHandler.xpUsage.get();
+            }
+
+            i++;
         }
     }
 
@@ -149,5 +166,32 @@ public class Excavador {
      */
     public List<BlockPos> getBlocksToMine() {
         return this.blocksToMine;
+    }
+
+    private static int getExpPoints(int level, float exp) {
+        int points = 0;
+
+        for (int i = 0; i < level; i++) {
+            points += Excavador.getXpBarCap(i);
+        }
+
+        points += Math.round(Excavador.getXpBarCap(level) * exp);
+        return points;
+    }
+
+    private static int getXpBarCap(int level) {
+        if (level >= 30) {
+            return 112 + ((level - 30) * 9);
+        }
+
+        if (level >= 15) {
+            return 37 + ((level - 15) * 5);
+        }
+
+        if (level < 0) {
+            return 0;
+        }
+
+        return 7 + (level * 2);
     }
 }

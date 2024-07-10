@@ -28,7 +28,7 @@ public class ShapeUtil {
         return ConfigHandler.disableDiagonals.get() ? Shapes.EASY_SHAPELESS : Shapes.SHAPELESS;
     }
 
-    enum Type {
+    public enum Type {
         ORES,
         LOGS,
         ORES_AND_LOGS,
