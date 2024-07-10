@@ -8,12 +8,15 @@ import de.melanx.excavar.api.shape.Shape;
 import de.melanx.excavar.api.shape.Shapes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.EventHooks;
 
@@ -22,6 +25,8 @@ import java.util.List;
 import java.util.Set;
 
 public class Excavador {
+
+    public static final TagKey<Block> FORBIDDEN_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("excavar", "forbidden_blocks"));
 
     public final BlockPos start;
     public final Level level;
@@ -110,6 +115,10 @@ public class Excavador {
         // find only start block when it's not the correct tool, but it's required via config
         if (this.requiresCorrectTool && (!EventHooks.doPlayerHarvestCheck(this.player, this.level.getBlockState(start), this.level, start)
                 || (ConfigHandler.fistForbidden.get() && this.player.getMainHandItem().isEmpty() && this.level.getBlockState(start).getDestroySpeed(this.level, start) > 1))) {
+            return;
+        }
+
+        if (ConfigHandler.invertForbiddenTag.get() != this.level.getBlockState(start).is(FORBIDDEN_BLOCKS)) {
             return;
         }
 
