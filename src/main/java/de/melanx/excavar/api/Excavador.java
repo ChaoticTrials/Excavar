@@ -148,10 +148,11 @@ public class Excavador {
         }
 
         int i = 0;
+        boolean payedXp = false;
         for (BlockPos pos : this.blocksToMine) {
             boolean xpUsageRequirement = switch (ConfigHandler.xpUsageType.get()) {
                 case PER_BLOCK -> i >= 1;
-                case PER_ACTION -> i == 1;
+                case PER_ACTION -> i == 1 || !payedXp;
             };
             boolean tooLessXp = xpUsageRequirement && totalPlayerXp - ConfigHandler.xpUsage.get() < 0;
             if ((tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt || tooLessXp) && !player.isCreative()) {
@@ -162,13 +163,15 @@ public class Excavador {
                 break;
             }
 
-            player.gameMode.destroyBlock(pos);
-            player.causeFoodExhaustion((float) (ConfigHandler.hungerUsage.get() - 0.005F));
+            if (player.gameMode.destroyBlock(pos)) {
+                player.causeFoodExhaustion((float) (ConfigHandler.hungerUsage.get() - 0.005F));
 
-            // prevent xp usage for first block
-            if (xpUsageRequirement) {
-                player.giveExperiencePoints(-ConfigHandler.xpUsage.get());
-                totalPlayerXp -= ConfigHandler.xpUsage.get();
+                // prevent xp usage for first block
+                if (xpUsageRequirement) {
+                    payedXp = true;
+                    player.giveExperiencePoints(-ConfigHandler.xpUsage.get());
+                    totalPlayerXp -= ConfigHandler.xpUsage.get();
+                }
             }
 
             i++;
