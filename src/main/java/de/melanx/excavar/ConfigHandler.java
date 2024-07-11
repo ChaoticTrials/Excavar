@@ -17,6 +17,7 @@ public class ConfigHandler {
 
     public static ModConfigSpec.IntValue blockLimit;
     public static ModConfigSpec.IntValue xpUsage;
+    public static ModConfigSpec.EnumValue<XpUsageType> xpUsageType;
     public static ModConfigSpec.DoubleValue hungerUsage;
     public static ModConfigSpec.BooleanValue requiresCorrectTool;
     public static ModConfigSpec.BooleanValue disableDiagonals;
@@ -29,8 +30,10 @@ public class ConfigHandler {
     public static void init(ModConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
                 .defineInRange("blocklimit", 16, 2, 8192);
-        xpUsage = builder.comment("How much xp points will be used for one block")
+        xpUsage = builder.comment("How much xp points will be used for one block/executed action (see xpUsageType)")
                 .defineInRange("xpUsage", 0, 0, 1000);
+        xpUsageType = builder.comment("How much xp points will be used for one block")
+                .defineEnum("xpUsageType", XpUsageType.PER_ACTION);
         hungerUsage = builder.comment("How much food exhaustion will caused by one block")
                 .defineInRange("hungerUsage", 0.005, 0, 1000);
         requiresCorrectTool = builder.comment("If set to true, you need the correct tool to break the blocks.")
@@ -52,5 +55,10 @@ public class ConfigHandler {
                         "botania:terra_axe",
                         "botania:terra_pick"
                 ), s -> s instanceof String);
+    }
+
+    public enum XpUsageType {
+        PER_BLOCK,
+        PER_ACTION
     }
 }

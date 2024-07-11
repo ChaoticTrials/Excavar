@@ -141,7 +141,7 @@ public class Excavador {
      * @param tool The tool which will be used to mine all the blocks
      */
     public void mine(ItemStack tool) {
-        int xp = Excavador.getExpPoints(this.player.experienceLevel, this.player.experienceProgress);
+        int totalPlayerXp = Excavador.getExpPoints(this.player.experienceLevel, this.player.experienceProgress);
         int stopAt = this.preventToolBreaking ? 2 : 1; // we need to increase this by 1, otherwise the tool will be broken too early
         if (!(this.player instanceof ServerPlayer player)) {
             throw new IllegalStateException("Can't mine on client side");
@@ -149,7 +149,11 @@ public class Excavador {
 
         int i = 0;
         for (BlockPos pos : this.blocksToMine) {
-            boolean tooLessXp = xp - ConfigHandler.xpUsage.get() < 0;
+            boolean xpUsageRequirement = switch (ConfigHandler.xpUsageType.get()) {
+                case PER_BLOCK -> i >= 1;
+                case PER_ACTION -> i == 1;
+            };
+            boolean tooLessXp = xpUsageRequirement && totalPlayerXp - ConfigHandler.xpUsage.get() < 0;
             if ((tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt || tooLessXp) && !player.isCreative()) {
                 if (tooLessXp) {
                     player.sendSystemMessage(Component.translatable("excavar.config.xp_usage.missing", this.blocksToMine.size() - i - ConfigHandler.xpUsage.get()));
@@ -162,9 +166,9 @@ public class Excavador {
             player.causeFoodExhaustion((float) (ConfigHandler.hungerUsage.get() - 0.005F));
 
             // prevent xp usage for first block
-            if (i >= 1) {
+            if (xpUsageRequirement) {
                 player.giveExperiencePoints(-ConfigHandler.xpUsage.get());
-                xp -= ConfigHandler.xpUsage.get();
+                totalPlayerXp -= ConfigHandler.xpUsage.get();
             }
 
             i++;
