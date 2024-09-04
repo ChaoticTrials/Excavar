@@ -1,0 +1,8 @@
+{
+  "excavar.key.excavar": "连锁挖掘",
+  "excavar.shape.selected": "选择形状：",
+  "excavar.shape.shapeless.desc": "临近方块",
+  "excavar.shape.tunnel.desc": "隧道",
+
+  "excavar.config.xp_usage.missing": "您需要额外的%s经验才能开采所有方块。"
+}
