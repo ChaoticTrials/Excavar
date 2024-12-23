@@ -57,10 +57,7 @@ public class ClientExcavar {
         }
 
         if (EXCAVAR.isDown() && Screen.hasShiftDown() && Minecraft.getInstance().player != null) {
-            ResourceLocation id = Shapes.getSelectedShape();
-            MutableComponent msg = Component.translatable("excavar.shape.selected");
-            msg.append(Component.translatable(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
-            Minecraft.getInstance().player.displayClientMessage(msg, true);
+            ClientExcavar.displayShapeSelection(Minecraft.getInstance().player);
         }
     }
 
@@ -91,6 +88,7 @@ public class ClientExcavar {
                 PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), id);
                 Excavar.getNetwork().update(player, data);
                 Excavar.getPlayerHandler().putPlayer(player.getGameProfile().getId(), data);
+                ClientExcavar.displayShapeSelection(player);
                 event.setCanceled(true);
             }
         }
@@ -137,6 +135,13 @@ public class ClientExcavar {
             Excavar.getNetwork().release(player);
             Excavar.getPlayerHandler().removePlayer(player.getGameProfile().getId());
         }
+    }
+
+    private static void displayShapeSelection(Player player) {
+        ResourceLocation id = Shapes.getSelectedShape();
+        MutableComponent msg = Component.translatable("excavar.shape.selected");
+        msg.append(Component.translatable(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
+        player.displayClientMessage(msg, true);
     }
 
     private record Matcher(@Nonnull BlockPos pos, Direction side, @Nonnull BlockState state,
