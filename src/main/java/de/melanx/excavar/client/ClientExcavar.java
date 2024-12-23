@@ -56,7 +56,7 @@ public class ClientExcavar {
 
     @SubscribeEvent
     public void keyInput(InputEvent.Key event) {
-        if (EXCAVAR.consumeClick()) {
+        if (event.getKey() == EXCAVAR.getKey().getValue()) {
             ClientExcavar.handleInput(event.getAction());
         }
 
@@ -70,7 +70,7 @@ public class ClientExcavar {
 
     @SubscribeEvent
     public void mouseInput(InputEvent.MouseButton.Pre event) {
-        if (EXCAVAR.consumeClick()) {
+        if (event.getButton() == EXCAVAR.getKey().getValue()) {
             ClientExcavar.handleInput(event.getAction());
         }
     }
