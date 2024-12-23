@@ -8,8 +8,9 @@ import de.melanx.excavar.api.Excavador;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -70,13 +71,13 @@ public class BlockHighlighter {
         return this.shape;
     }
 
-    public void render(LevelRenderer levelRenderer, PoseStack poseStack) {
+    public void render(MultiBufferSource buffer, PoseStack poseStack) {
         poseStack.pushPose();
         Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         poseStack.translate(this.excavador.start.getX() - projection.x, this.excavador.start.getY() - projection.y, this.excavador.start.getZ() - projection.z);
 
-        VertexConsumer vertex = OutlineBuffer.INSTANCE.getBuffer(RenderType.lines());
-        LevelRenderer.renderShape(poseStack, vertex, this.shape(), 0, 0, 0, 1, 1, 1, 1);
+        VertexConsumer vertex = buffer.getBuffer(RenderType.lines());
+        ShapeRenderer.renderShape(poseStack, vertex, this.shape(), 0,0,0, -1);
         poseStack.popPose();
     }
 }

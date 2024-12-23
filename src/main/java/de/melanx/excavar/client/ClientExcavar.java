@@ -119,7 +119,7 @@ public class ClientExcavar {
                 this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape()));
             }
 
-            this.blockHighlighter.render(event.getLevelRenderer(), event.getPoseStack());
+            this.blockHighlighter.render(event.getMultiBufferSource(), event.getPoseStack());
         } else {
             this.blockHighlighter = null;
         }
