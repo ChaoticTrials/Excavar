@@ -16,14 +16,14 @@ body:
     id: mod-version
     attributes:
       label: Excavar version
-      placeholder: eg. 1.18.1-1.0.0
+      placeholder: eg. 1.21.3-4.1.0
     validations:
       required: true
   - type: input
     id: forge-version
     attributes:
-      label: (Neo)Forge version
-      placeholder: eg. 39.0.9
+      label: NeoForge version
+      placeholder: eg. 21.3.63
     validations:
       required: true
   - type: input
