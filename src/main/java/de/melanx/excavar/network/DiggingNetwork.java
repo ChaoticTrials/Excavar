@@ -5,7 +5,7 @@ import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.network.handler.KeyPress;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -21,19 +21,19 @@ public class DiggingNetwork {
 
     public static void press(Player player, PlayerHandler.ClientData data) {
         if (player instanceof LocalPlayer) {
-            PacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.PRESS, data));
+            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.PRESS, data));
         }
     }
 
     public static void release(Player player) {
         if (player instanceof LocalPlayer) {
-            PacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.RELEASE));
+            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.RELEASE));
         }
     }
 
     public static void update(Player player, PlayerHandler.ClientData data) {
         if (player instanceof LocalPlayer) {
-            PacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.UPDATE, data));
+            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.UPDATE, data));
         }
     }
 }
