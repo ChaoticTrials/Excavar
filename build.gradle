@@ -55,6 +55,7 @@ mod.configure {
         all {
             type 'release'
             version '1.21.7'
+            version '1.21.8'
         }
         curseforge {
             projectId 561528
