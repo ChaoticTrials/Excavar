@@ -32,17 +32,17 @@ public class BlockRenderer implements CustomBlockOutlineRenderer {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
         if (!ClientConfig.enableOutline.get() || !ListHandler.isToolAllowed(player.getMainHandItem())) {
-            return true;
+            return false;
         }
 
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult)) {
-            return true;
+            return false;
         }
 
         BlockState state = player.level().getBlockState(hitResult.getBlockPos());
 
         if (!ShapeUtil.miningAllowed(state)) {
-            return true;
+            return false;
         }
 
         if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get())) {
