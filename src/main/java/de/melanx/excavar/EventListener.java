@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,15 +24,15 @@ public class EventListener {
     public void onBreakBlock(BlockEvent.BreakEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
             PlayerHandler playerHandler = Excavar.getPlayerHandler();
-            UUID playerId = player.getGameProfile().getId();
+            UUID playerId = player.getGameProfile().id();
             if (playerHandler.canDig(player)) {
                 BlockState state = event.getState();
                 if (!ShapeUtil.miningAllowed(state) || !ListHandler.isToolAllowed(player.getMainHandItem())) {
                     return;
                 }
 
-                Level level = player.level();
-                if (NeoForge.EVENT_BUS.post(new DiggingEvent.Pre((ServerLevel) level, player, Lists.newArrayList(), state.getBlock())).isCanceled()) {
+                ServerLevel level = player.level();
+                if (NeoForge.EVENT_BUS.post(new DiggingEvent.Pre(level, player, Lists.newArrayList(), state.getBlock())).isCanceled()) {
                     return;
                 }
 
@@ -47,7 +46,7 @@ public class EventListener {
                 Excavador excavador = new Excavador(shapeId, event.getPos(), level, player, side, state);
                 excavador.findBlocks();
 
-                if (NeoForge.EVENT_BUS.post(new DiggingEvent.FoundPositions((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock())).isCanceled()) {
+                if (NeoForge.EVENT_BUS.post(new DiggingEvent.FoundPositions(level, player, excavador.getBlocksToMine(), state.getBlock())).isCanceled()) {
                     playerHandler.stopDigging(playerId);
                     return;
                 }
@@ -55,7 +54,7 @@ public class EventListener {
                 playerHandler.startDigging(playerId);
                 excavador.mine(event.getPlayer().getMainHandItem());
                 playerHandler.stopDigging(playerId);
-                NeoForge.EVENT_BUS.post(new DiggingEvent.Post((ServerLevel) level, player, excavador.getBlocksToMine(), state.getBlock()));
+                NeoForge.EVENT_BUS.post(new DiggingEvent.Post(level, player, excavador.getBlocksToMine(), state.getBlock()));
             }
         }
     }

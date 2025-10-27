@@ -10,7 +10,7 @@ repositories {
 }
 
 var dev = System.getenv('IS_DEV')?.toBoolean() ?: false
-var baseVersion = '21.7'
+var baseVersion = '21.9'
 
 mod.configure {
     modid 'excavar'
@@ -54,8 +54,8 @@ mod.configure {
     upload {
         all {
             type 'release'
-            version '1.21.7'
-            version '1.21.8'
+            version '1.21.9'
+            version '1.21.10'
         }
         curseforge {
             projectId 561528

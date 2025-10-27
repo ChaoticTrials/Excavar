@@ -36,7 +36,7 @@ public class PlayerHandler {
      * Considers whether the {@code player} is digging.
      */
     public boolean canDig(Player player) {
-        UUID id = player.getGameProfile().getId();
+        UUID id = player.getGameProfile().id();
         return this.players.containsKey(id) && (!this.players.get(id).requiresSneaking || player.isShiftKeyDown()) && !this.diggers.contains(id);
     }
 

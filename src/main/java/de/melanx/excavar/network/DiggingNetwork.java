@@ -21,19 +21,19 @@ public class DiggingNetwork {
 
     public static void press(Player player, PlayerHandler.ClientData data) {
         if (player instanceof LocalPlayer) {
-            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.PRESS, data));
+            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().id(), KeyPress.PressType.PRESS, data));
         }
     }
 
     public static void release(Player player) {
         if (player instanceof LocalPlayer) {
-            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.RELEASE));
+            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().id(), KeyPress.PressType.RELEASE));
         }
     }
 
     public static void update(Player player, PlayerHandler.ClientData data) {
         if (player instanceof LocalPlayer) {
-            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().getId(), KeyPress.PressType.UPDATE, data));
+            ClientPacketDistributor.sendToServer(new KeyPress(player.getGameProfile().id(), KeyPress.PressType.UPDATE, data));
         }
     }
 }
