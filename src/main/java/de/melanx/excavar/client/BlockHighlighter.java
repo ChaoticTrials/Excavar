@@ -76,7 +76,7 @@ public class BlockHighlighter {
         Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         poseStack.translate(this.excavador.start.getX() - projection.x, this.excavador.start.getY() - projection.y, this.excavador.start.getZ() - projection.z);
 
-        VertexConsumer vertex = buffer.getBuffer(RenderType.lines());
+        VertexConsumer vertex = OutlineBuffer.INSTANCE.getBuffer(RenderType.lines());
         ShapeRenderer.renderShape(poseStack, vertex, this.shape(), 0,0,0, -1);
         poseStack.popPose();
     }
