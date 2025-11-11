@@ -13,7 +13,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +29,6 @@ public class Excavar {
         bus.addListener(this::commonSetup);
         bus.addListener(DiggingNetwork::onRegisterPayloadHandler);
         bus.addListener(ListHandler::onConfigChange);
-        NeoForge.EVENT_BUS.register(new EventListener());
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
