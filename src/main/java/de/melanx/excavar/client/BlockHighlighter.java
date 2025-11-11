@@ -2,7 +2,6 @@ package de.melanx.excavar.client;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.Excavador;
 import net.minecraft.client.Minecraft;
@@ -21,10 +20,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.awt.Color;
 import java.util.List;
 
 public class BlockHighlighter {
 
+    public static final Color LIGHT_GRAY = new Color(255,255,255, 30);
     private final Excavador excavador;
     private VoxelShape shape;
     private final ClientLevel level;
@@ -59,12 +60,13 @@ public class BlockHighlighter {
             this.excavador.findBlocks(maxBlocks);
             List<VoxelShape> allShapes = Lists.newArrayList();
             for (BlockPos pos : this.excavador.getBlocksToMine()) {
-                VoxelShape blockShape = this.excavador.level.getBlockState(pos).getVisualShape(this.excavador.level, pos, CollisionContext.empty());
+                VoxelShape blockShape = this.excavador.level.getBlockState(pos).getShape(this.excavador.level, pos, CollisionContext.empty());
                 double dx = pos.getX() - this.excavador.start.getX();
                 double dy = pos.getY() - this.excavador.start.getY();
                 double dz = pos.getZ() - this.excavador.start.getZ();
                 allShapes.add(blockShape.move(dx, dy, dz));
             }
+
             this.shape = Shapes.or(Shapes.empty(), allShapes.toArray(new VoxelShape[]{})).optimize();
         }
 
@@ -76,8 +78,9 @@ public class BlockHighlighter {
         Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         poseStack.translate(this.excavador.start.getX() - projection.x, this.excavador.start.getY() - projection.y, this.excavador.start.getZ() - projection.z);
 
-        VertexConsumer vertex = buffer.getBuffer(RenderType.lines());
-        ShapeRenderer.renderShape(poseStack, vertex, this.shape(), 0,0,0, -1);
+        VoxelShape allBlocksShape = this.shape();
+        ShapeRenderer.renderShape(poseStack, buffer.getBuffer(RenderType.lines()), allBlocksShape, 0,0,0, Color.WHITE.getRGB());
+        ShapeRenderer.renderShape(poseStack, buffer.getBuffer(HiddenRenderTypes.HIDDEN_OUTLINES), allBlocksShape, 0,0,0, LIGHT_GRAY.getRGB());
         poseStack.popPose();
     }
 }
