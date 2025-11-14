@@ -56,7 +56,6 @@ mod.configure {
     upload {
         all {
             type 'release'
-            dontInferDefaultVersions()
             version '1.21.3'
             version '1.21.4'
             version '1.21.5'
