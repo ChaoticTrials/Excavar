@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public class PlantsShapeless implements Shape {
+public class PlantsShapeless extends Shapeless implements Shape {
 
     private static final List<BlockPos> CORNER_OFFSETS = Lists.newArrayList(
             new BlockPos(0, 0, 1),
@@ -40,33 +40,22 @@ public class PlantsShapeless implements Shape {
     );
 
     @Override
-    public int addNeighbors(Level level, BlockPos pos, Direction side, BlockState originalState, List<BlockPos> blocksToMine, int stepsLeft) {
-        BlockPos.MutableBlockPos newPos = pos.mutable();
-        for (Direction value : Direction.Plane.HORIZONTAL) {
-            if (stepsLeft > 0) {
-                newPos.move(value);
-                if (!blocksToMine.contains(newPos) && Matcher.PLANT.test(originalState, level.getBlockState(newPos))) {
-                    blocksToMine.add(newPos.immutable());
-                    stepsLeft--;
-                }
-                newPos.set(pos);
-            } else {
-                return stepsLeft;
-            }
-        }
+    public void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+        this.addNeighbors(level, pos, originalState, blocksToMine, maxBlocks, pos.immutable());
+    }
 
-        newPos.set(pos);
-        for (BlockPos offset : CORNER_OFFSETS) {
-            if (stepsLeft > 0) {
-                newPos.move(offset);
-                if (!blocksToMine.contains(newPos) && Matcher.PLANT.test(originalState, level.getBlockState(newPos))) {
-                    blocksToMine.add(newPos.immutable());
-                    stepsLeft--;
-                }
-                newPos.set(pos);
-            }
-        }
+    @Override
+    protected Iterable<Direction> directions() {
+        return Direction.Plane.HORIZONTAL;
+    }
 
-        return stepsLeft;
+    @Override
+    protected List<BlockPos> cornerOffsets() {
+        return CORNER_OFFSETS;
+    }
+
+    @Override
+    protected Matcher blockMatcher() {
+        return Matcher.PLANT;
     }
 }

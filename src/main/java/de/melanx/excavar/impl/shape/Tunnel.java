@@ -12,13 +12,13 @@ import java.util.List;
 public class Tunnel implements Shape {
 
     @Override
-    public int addNeighbors(Level level, BlockPos pos, Direction side, BlockState originalState, List<BlockPos> blocksToMine, int stepsLeft) {
-        BlockPos neighbor = pos.relative(side.getOpposite());
-        if (stepsLeft > 0 && !blocksToMine.contains(neighbor) && Matcher.SAME_BLOCK.test(originalState, level.getBlockState(neighbor))) {
-            blocksToMine.add(neighbor);
-            stepsLeft--;
-        }
+    public void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+        BlockPos.MutableBlockPos neighbor = pos.mutable().move(forwardDirection);
 
-        return stepsLeft;
+        while (maxBlocks > 0 && !blocksToMine.contains(neighbor) && Matcher.SAME_BLOCK.test(originalState, level.getBlockState(neighbor))) {
+            blocksToMine.add(neighbor.immutable());
+            maxBlocks--;
+            neighbor = neighbor.move(forwardDirection);
+        }
     }
 }

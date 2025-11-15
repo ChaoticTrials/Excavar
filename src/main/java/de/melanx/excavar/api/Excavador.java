@@ -1,7 +1,6 @@
 package de.melanx.excavar.api;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.shape.Shape;
@@ -22,7 +21,6 @@ import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Set;
 
 public class Excavador {
 
@@ -108,7 +106,6 @@ public class Excavador {
         if (!this.blocksToMine.isEmpty()) return;
         int limit = Math.min(maxBlocks, ConfigHandler.blockLimit.get());
         this.blocksToMine.add(this.start);
-        Set<BlockPos> usedBlocks = Sets.newHashSet();
         limit--;
         BlockPos start = this.start;
 
@@ -122,17 +119,7 @@ public class Excavador {
             return;
         }
 
-        while (limit > 0) {
-            if (start == null) {
-                break;
-            }
-            usedBlocks.add(start);
-            limit = this.shape.addNeighbors(this.level, start, this.side, this.originalState, this.blocksToMine, limit);
-            start = this.blocksToMine.stream()
-                    .filter(pos -> !usedBlocks.contains(pos))
-                    .findFirst()
-                    .orElse(null);
-        }
+        this.shape.addNeighbors(this.level, start.mutable(), this.side.getOpposite(), this.originalState, this.blocksToMine, limit);
     }
 
     /**
@@ -143,33 +130,33 @@ public class Excavador {
     public void mine(ItemStack tool) {
         int totalPlayerXp = Excavador.getExpPoints(this.player.experienceLevel, this.player.experienceProgress);
         int stopAt = this.preventToolBreaking ? 2 : 1; // we need to increase this by 1, otherwise the tool will be broken too early
-        if (!(this.player instanceof ServerPlayer player)) {
+        if (!(this.player instanceof ServerPlayer serverPlayer)) {
             throw new IllegalStateException("Can't mine on client side");
         }
 
         int i = 0;
         boolean payedXp = false;
         for (BlockPos pos : this.blocksToMine) {
-            boolean xpUsageRequirement = switch (ConfigHandler.xpUsageType.get()) {
+            boolean xpUsageRequirement = switch(ConfigHandler.xpUsageType.get()) {
                 case PER_BLOCK -> i >= 1;
                 case PER_ACTION -> i == 1 || !payedXp;
             };
             boolean tooLessXp = xpUsageRequirement && totalPlayerXp - ConfigHandler.xpUsage.get() < 0;
-            if ((tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt || tooLessXp) && !player.isCreative()) {
+            if ((tool.isDamageableItem() && tool.getMaxDamage() - tool.getDamageValue() <= stopAt || tooLessXp) && !serverPlayer.isCreative()) {
                 if (tooLessXp) {
-                    player.sendSystemMessage(Component.translatable("excavar.config.xp_usage.missing", this.blocksToMine.size() - i - ConfigHandler.xpUsage.get()));
+                    serverPlayer.sendSystemMessage(Component.translatable("excavar.config.xp_usage.missing", this.blocksToMine.size() - i - ConfigHandler.xpUsage.get()));
                 }
 
                 break;
             }
 
-            if (player.gameMode.destroyBlock(pos)) {
-                player.causeFoodExhaustion((float) (ConfigHandler.hungerUsage.get() - 0.005F));
+            if (serverPlayer.gameMode.destroyBlock(pos)) {
+                serverPlayer.causeFoodExhaustion((float) (ConfigHandler.hungerUsage.get() - 0.005F));
 
                 // prevent xp usage for first block
                 if (xpUsageRequirement) {
                     payedXp = true;
-                    player.giveExperiencePoints(-ConfigHandler.xpUsage.get());
+                    serverPlayer.giveExperiencePoints(-ConfigHandler.xpUsage.get());
                     totalPlayerXp -= ConfigHandler.xpUsage.get();
                 }
             }
