@@ -3,10 +3,7 @@ package de.melanx.excavar;
 import de.melanx.excavar.api.PlayerHandler;
 import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.config.ListHandler;
-import de.melanx.excavar.impl.shape.EasyShapeless;
-import de.melanx.excavar.impl.shape.PlantsShapeless;
-import de.melanx.excavar.impl.shape.Shapeless;
-import de.melanx.excavar.impl.shape.Tunnel;
+import de.melanx.excavar.impl.shape.*;
 import de.melanx.excavar.network.DiggingNetwork;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -36,6 +33,7 @@ public class Excavar {
         Shapes.register(Shapes.EASY_SHAPELESS, new EasyShapeless(), false);
         Shapes.register(Shapes.PLANTS_SHAPELESS, new PlantsShapeless(), false);
         Shapes.register(Shapes.TUNNEL, new Tunnel());
+        Shapes.register(Shapes.BIG_TUNNEL, new BigTunnel());
     }
 
     public static PlayerHandler getPlayerHandler() {
