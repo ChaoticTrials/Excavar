@@ -1,8 +1,9 @@
 package de.melanx.excavar;
 
+import de.melanx.excavar.api.shape.Shapes;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ConfigHandler {
@@ -26,6 +27,7 @@ public class ConfigHandler {
     public static ModConfigSpec.BooleanValue invertForbiddenTag;
     public static ModConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
     public static ModConfigSpec.ConfigValue<List<? extends String>> deniedTools;
+    public static ModConfigSpec.ConfigValue<List<? extends String>> deniedShapes;
 
     public static void init(ModConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
@@ -51,10 +53,14 @@ public class ConfigHandler {
                 .defineEnum("allowedBlocks", ShapeUtil.Type.ALL);
         deniedTools = builder.comment("A list of tools which aren't allowed.",
                         "You can use \"*\" to define a wildcard, e.g. \"minecraft:*_pickaxe\" will add all vanilla pickaxes to the list.")
-                .defineList("forbiddenItems", Arrays.asList(
+                .defineList("forbiddenItems", List.of(
                         "botania:terra_axe",
                         "botania:terra_pick"
-                ), s -> s instanceof String);
+                ), () -> "", s -> s instanceof String);
+        deniedShapes = builder.comment("A list of shapes which aren't allowed.", "All registered shapes can be found in latest.log, but only selectable shapes can be disabled.")
+                .defineList("forbiddenShapes", List.of(
+                        Shapes.BIG_TUNNEL.toString()
+                ), () -> "excavar:shapeless", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
     }
 
     public enum XpUsageType {

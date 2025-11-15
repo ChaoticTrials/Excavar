@@ -2,10 +2,12 @@ package de.melanx.excavar.config;
 
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
+import de.melanx.excavar.api.shape.Shapes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 
 import java.util.HashSet;
@@ -36,8 +38,10 @@ public class ListHandler {
     }
 
     public static void onConfigChange(ModConfigEvent event) {
-        if (event.getConfig().getModId().equals(Excavar.MODID)) {
+        ModConfig config = event.getConfig();
+        if (config.getModId().equals(Excavar.MODID) && config.getType() == ModConfig.Type.SERVER) {
             TOOL_DENY_LIST = null;
+            Shapes.refreshSelectableShapes();
         }
     }
 
