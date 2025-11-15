@@ -16,6 +16,7 @@ public class Shapes {
     public static final ResourceLocation EASY_SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "easy_shapeless");
     public static final ResourceLocation PLANTS_SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "plants_shapeless");
     public static final ResourceLocation TUNNEL = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "tunnel");
+    public static final ResourceLocation BIG_TUNNEL = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "big_tunnel");
     private static ResourceLocation currentShape = SHAPELESS;
 
     private Shapes() {}
