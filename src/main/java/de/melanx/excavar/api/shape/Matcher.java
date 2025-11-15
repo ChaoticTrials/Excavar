@@ -11,7 +11,7 @@ public interface Matcher {
     boolean test(BlockState original, BlockState state);
 
     Matcher SAME_BLOCK = (original, state) -> original.getBlock() == state.getBlock();
-    Matcher PLANT = (original, state) -> state.getBlock() instanceof BushBlock bush && Matcher.plantType(bush) == Matcher.plantType(original.getBlock());
+    Matcher PLANT = (original, state) -> state.getBlock() instanceof VegetationBlock veggi && Matcher.plantType(veggi) == Matcher.plantType(original.getBlock());
 
     private static PlantType plantType(Block block) {
         if (block instanceof CropBlock) {
