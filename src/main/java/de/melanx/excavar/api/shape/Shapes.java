@@ -2,14 +2,19 @@ package de.melanx.excavar.api.shape;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
 
 public class Shapes {
 
+    public static final Logger LOGGER = LogManager.getLogger(Shapes.class);
+    private final static List<ResourceLocation> allSelectableShapes = Lists.newArrayList();
     private final static List<ResourceLocation> selectableShapes = Lists.newArrayList();
     private final static Map<ResourceLocation, Shape> registry = Maps.newHashMap();
     public static final ResourceLocation SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "shapeless");
@@ -43,8 +48,9 @@ public class Shapes {
         }
 
         registry.put(id, shape);
+        LOGGER.info("Registered shape '{}' - selectable {}", id, selectable ? "✅" : "❌");
         if (selectable) {
-            selectableShapes.add(id);
+            allSelectableShapes.add(id);
         }
     }
 
@@ -95,5 +101,13 @@ public class Shapes {
      */
     public static ResourceLocation getSelectedShape() {
         return currentShape;
+    }
+
+    public static void refreshSelectableShapes() {
+        selectableShapes.clear();
+        selectableShapes.addAll(allSelectableShapes);
+        selectableShapes.removeIf(id -> ConfigHandler.deniedShapes.get().contains(id.toString()));
+
+        currentShape = selectableShapes.contains(currentShape) ? currentShape : selectableShapes.getFirst();
     }
 }
