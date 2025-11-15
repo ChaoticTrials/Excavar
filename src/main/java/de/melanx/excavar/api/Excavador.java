@@ -11,6 +11,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -107,19 +109,17 @@ public class Excavador {
         int limit = Math.min(maxBlocks, ConfigHandler.blockLimit.get());
         this.blocksToMine.add(this.start);
         limit--;
-        BlockPos start = this.start;
 
         // find only start block when it's not the correct tool, but it's required via config
-        if (this.requiresCorrectTool && (!EventHooks.doPlayerHarvestCheck(this.player, this.level.getBlockState(start), this.level, start)
-                || (ConfigHandler.fistForbidden.get() && this.player.getMainHandItem().isEmpty() && this.level.getBlockState(start).getDestroySpeed(this.level, start) > 1))) {
+        if (this.cannotMine()) {
             return;
         }
 
-        if (ConfigHandler.invertForbiddenTag.get() != this.level.getBlockState(start).is(FORBIDDEN_BLOCKS)) {
+        if (ConfigHandler.invertForbiddenTag.get() != this.level.getBlockState(this.start).is(FORBIDDEN_BLOCKS)) {
             return;
         }
 
-        this.shape.addNeighbors(this.level, start.mutable(), this.side.getOpposite(), this.originalState, this.blocksToMine, limit);
+        this.shape.addNeighbors(this.level, this.start.mutable(), this.side.getOpposite(), this.originalState, this.blocksToMine, limit);
     }
 
     /**
@@ -170,6 +170,47 @@ public class Excavador {
      */
     public List<BlockPos> getBlocksToMine() {
         return this.blocksToMine;
+    }
+
+    private boolean cannotMine() {
+        BlockState state = this.level.getBlockState(this.start);
+        boolean forbiddenFist = ConfigHandler.fistForbidden.get()
+                && this.player.getMainHandItem().isEmpty()
+                && state.getDestroySpeed(this.level, this.start) > 0;
+
+        if (!this.requiresCorrectTool) {
+            return forbiddenFist;
+        }
+
+        boolean cannotHarvest = !EventHooks.doPlayerHarvestCheck(
+                this.player, state, this.level, this.start);
+
+        ItemStack mainHandItem = this.player.getMainHandItem();
+        boolean toolTagMatches = this.toolTagMatchesBlock(mainHandItem, state);
+
+        return !toolTagMatches || cannotHarvest || forbiddenFist;
+    }
+
+    private boolean toolTagMatchesBlock(ItemStack stack, BlockState state) {
+        boolean isAxe = stack.is(ItemTags.AXES);
+        boolean isHoe = stack.is(ItemTags.HOES);
+        boolean isPickaxe = stack.is(ItemTags.PICKAXES);
+        boolean isShovel = stack.is(ItemTags.SHOVELS);
+        boolean isSword = stack.is(ItemTags.SWORDS);
+
+        boolean blockNeedsAxe = state.is(BlockTags.MINEABLE_WITH_AXE);
+        boolean blockNeedsHoe = state.is(BlockTags.MINEABLE_WITH_HOE);
+        boolean blockNeedsPickaxe = state.is(BlockTags.MINEABLE_WITH_PICKAXE);
+        boolean blockNeedsShovel = state.is(BlockTags.MINEABLE_WITH_SHOVEL);
+        boolean blockNeedsSword = state.is(BlockTags.SWORD_EFFICIENT) || state.is(BlockTags.SWORD_INSTANTLY_MINES);
+
+        if (isAxe && blockNeedsAxe) return true;
+        if (isHoe && blockNeedsHoe) return true;
+        if (isPickaxe && blockNeedsPickaxe) return true;
+        if (isShovel && blockNeedsShovel) return true;
+        if (isSword && blockNeedsSword) return true;
+
+        return !(blockNeedsAxe || blockNeedsHoe || blockNeedsPickaxe || blockNeedsShovel || blockNeedsSword);
     }
 
     private static int getExpPoints(int level, float exp) {
