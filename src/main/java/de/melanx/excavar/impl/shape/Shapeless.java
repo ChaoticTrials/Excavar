@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.melanx.excavar.api.shape.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -38,9 +39,9 @@ public class Shapeless implements Shape {
     );
 
     @Override
-    public void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+    public void addNeighbors(Level level, Player player, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         BlockPos mainPos = pos.immutable();
-        this.addNeighbors(level, pos, originalState, blocksToMine, maxBlocks, mainPos);
+        this.addNeighbors(level, player, pos, originalState, blocksToMine, maxBlocks, mainPos);
     }
 
     protected Iterable<Direction> directions() {
@@ -51,7 +52,7 @@ public class Shapeless implements Shape {
         return CORNER_OFFSETS;
     }
 
-    protected void addNeighbors(Level level, BlockPos.MutableBlockPos pos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks, BlockPos mainPos) {
+    protected void addNeighbors(Level level, Player player, BlockPos.MutableBlockPos pos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks, BlockPos mainPos) {
         if (maxBlocks <= 0) {
             return;
         }
@@ -65,8 +66,8 @@ public class Shapeless implements Shape {
 
             pos.set(mainPos);
             usedBlocks.add(mainPos);
-            maxBlocks = this.tryAddByDirections(level, pos, mainPos, originalState, blocksToMine, maxBlocks);
-            maxBlocks = this.tryAddByOffsets(level, pos, mainPos, originalState, blocksToMine, maxBlocks);
+            maxBlocks = this.tryAddByDirections(level, player, pos, mainPos, originalState, blocksToMine, maxBlocks);
+            maxBlocks = this.tryAddByOffsets(level, player, pos, mainPos, originalState, blocksToMine, maxBlocks);
 
             mainPos = blocksToMine.stream()
                     .filter(p -> !usedBlocks.contains(p))
@@ -75,8 +76,8 @@ public class Shapeless implements Shape {
         }
     }
 
-    protected int tryAddBlock(Level level, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
-        if (this.canAddBlock(level, pos, originalState, blocksToMine, maxBlocks)) {
+    protected int tryAddBlock(Level level, Player player, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+        if (this.canAddBlock(level, player, pos, originalState, blocksToMine, maxBlocks)) {
             blocksToMine.add(pos.immutable());
             maxBlocks--;
         }
@@ -85,19 +86,19 @@ public class Shapeless implements Shape {
         return maxBlocks;
     }
 
-    protected int tryAddByDirections(Level level, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+    protected int tryAddByDirections(Level level, Player player, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         for (Direction direction : this.directions()) {
             pos.move(direction);
-            maxBlocks = this.tryAddBlock(level, pos, originalPos, originalState, blocksToMine, maxBlocks);
+            maxBlocks = this.tryAddBlock(level, player, pos, originalPos, originalState, blocksToMine, maxBlocks);
         }
 
         return maxBlocks;
     }
 
-    protected int tryAddByOffsets(Level level, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+    protected int tryAddByOffsets(Level level, Player player, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         for (BlockPos offset : this.cornerOffsets()) {
             pos.move(offset);
-            maxBlocks = this.tryAddBlock(level, pos, originalPos, originalState, blocksToMine, maxBlocks);
+            maxBlocks = this.tryAddBlock(level, player, pos, originalPos, originalState, blocksToMine, maxBlocks);
         }
 
         return maxBlocks;

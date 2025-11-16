@@ -1,5 +1,6 @@
 package de.melanx.excavar.api.shape;
 
+import de.melanx.excavar.api.ConfiguredSameTags;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -10,7 +11,7 @@ public interface Matcher {
 
     boolean test(BlockState original, BlockState state);
 
-    Matcher SAME_BLOCK = (original, state) -> original.getBlock() == state.getBlock();
+    Matcher SAME_BLOCK = (original, state) -> original.getBlock() == state.getBlock() || ConfiguredSameTags.isAllowed(original, state);
     Matcher PLANT = (original, state) -> state.getBlock() instanceof BushBlock bush && Matcher.plantType(bush) == Matcher.plantType(original.getBlock());
 
     private static PlantType plantType(Block block) {
