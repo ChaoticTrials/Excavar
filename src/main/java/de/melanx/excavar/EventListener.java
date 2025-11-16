@@ -48,7 +48,7 @@ public class EventListener {
                 Direction side = ((BlockHitResult) player.pick(20, 0, false)).getDirection();
 
                 ResourceLocation shapeId = playerHandler.getShapeId(playerId);
-                if (!ConfigHandler.allowShapeSelection.get() || shapeId == Shapes.SHAPELESS) {
+                if (!ConfigHandler.allowShapeSelection.get() || Shapes.SHAPELESS.equals(shapeId)) {
                     shapeId = ShapeUtil.getShapeId(state.getBlock());
                 }
 
