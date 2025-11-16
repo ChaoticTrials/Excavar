@@ -3,6 +3,7 @@ package de.melanx.excavar.impl.shape;
 import de.melanx.excavar.api.shape.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -12,12 +13,12 @@ import java.util.List;
 public class BigTunnel implements Shape {
 
     @Override
-    public void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+    public void addNeighbors(Level level, Player player, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         Direction[] planeAxes = this.crossSectionAxes(forwardDirection);
         Direction axisA = planeAxes[0];
         Direction axisB = planeAxes[1];
 
-        if (this.canAddBlock(level, pos, originalState, blocksToMine, maxBlocks)) {
+        if (this.canAddBlock(level, player, pos, originalState, blocksToMine, maxBlocks)) {
             blocksToMine.add(pos.immutable());
             maxBlocks--;
         }
@@ -37,7 +38,7 @@ public class BigTunnel implements Shape {
                             .relative(axisA, a)
                             .relative(axisB, b);
 
-                    if (this.canAddBlock(level, candidate, originalState, blocksToMine, maxBlocks)) {
+                    if (this.canAddBlock(level, player, candidate, originalState, blocksToMine, maxBlocks)) {
                         layer.add(candidate);
                     }
                 }
@@ -45,7 +46,7 @@ public class BigTunnel implements Shape {
 
             // forward center block
             pos = pos.move(forwardDirection);
-            if (this.canAddBlock(level, pos, originalState, blocksToMine, maxBlocks)) {
+            if (this.canAddBlock(level, player, pos, originalState, blocksToMine, maxBlocks)) {
                 layer.add(pos.immutable());
             }
 

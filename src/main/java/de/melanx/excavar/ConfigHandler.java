@@ -29,6 +29,7 @@ public class ConfigHandler {
     public static ModConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
     public static ModConfigSpec.ConfigValue<List<? extends String>> deniedTools;
     public static ModConfigSpec.ConfigValue<List<? extends String>> deniedShapes;
+    public static ModConfigSpec.ConfigValue<List<? extends String>> groupedTags;
 
     public static void init(ModConfigSpec.Builder builder) {
         blockLimit = builder.comment("How many blocks should be mined at once?")
@@ -64,6 +65,8 @@ public class ConfigHandler {
                 .defineList("forbiddenShapes", List.of(
                         Shapes.BIG_TUNNEL.toString()
                 ), () -> "excavar:shapeless", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
+        groupedTags = builder.comment("A list of tags which will be grouped together.")
+                .defineList("groupedTags", List.of(), () -> "", s -> s instanceof String);
     }
 
     public enum XpUsageType {
