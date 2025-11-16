@@ -1,5 +1,5 @@
 plugins {
-    id 'org.moddingx.modgradle.meta' version '5.0.3'
+    id 'org.moddingx.modgradle.meta' version '5.0.4'
 }
 
 repositories {
@@ -43,7 +43,6 @@ mod.configure {
 
         return filteredChangelog
     }
-
 
     publishing {
         maven {

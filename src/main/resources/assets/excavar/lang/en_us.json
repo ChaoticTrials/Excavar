@@ -5,5 +5,25 @@
   "excavar.shape.tunnel.desc": "Tunnel",
   "excavar.shape.big_tunnel.desc": "3x3 Tunnel",
 
-  "excavar.config.xp_usage.missing": "You need additional %s xp to mine all blocks."
+  "excavar.config.xp_usage.missing": "You need additional %s xp to mine all blocks.",
+
+  "excavar.configuration.enableOutline": "Enable Outline",
+  "excavar.configuration.considerDurability": "Consider Durability",
+  "excavar.configuration.preventBreaking": "Prevent Breaking",
+  "excavar.configuration.sneakingRequired": "Require Sneaking",
+
+  "excavar.configuration.invertForbiddenTag": "Invert Forbidden Blocks Tag",
+  "excavar.configuration.xpUsage": "XP Usage",
+  "excavar.configuration.forbiddenItems": "Forbidden Items",
+  "excavar.configuration.forbiddenShapes": "Forbidden Shapes",
+  "excavar.configuration.requiresCorrectTool": "Requires Correct Tool",
+  "excavar.configuration.fistForbidden": "Fist Forbidden",
+  "excavar.configuration.hungerUsage": "Hunger Usage",
+  "excavar.configuration.collectDrops": "Collect Drops",
+  "excavar.configuration.xpUsageType": "XP Usage Type",
+  "excavar.configuration.allowedBlocks": "Allowed Blocks",
+  "excavar.configuration.disableDiagonals": "Disable Diagonals",
+  "excavar.configuration.groupedTags": "Grouped Tags",
+  "excavar.configuration.blocklimit": "Block Limit",
+  "excavar.configuration.allowShapeSelection": "Allow Shape Selection"
 }

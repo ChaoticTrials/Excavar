@@ -5,5 +5,25 @@
   "excavar.shape.tunnel.desc": "Tunnel",
   "excavar.shape.big_tunnel.desc": "3x3 Tunnel",
 
-  "excavar.config.xp_usage.missing": "Du brauchst weitere %s XP, um alle Blöcke abzubauen."
+  "excavar.config.xp_usage.missing": "Du brauchst weitere %s XP, um alle Blöcke abzubauen.",
+
+  "excavar.configuration.enableOutline": "Kontur anzeigen",
+  "excavar.configuration.considerDurability": "Haltbarkeit berücksichtigen",
+  "excavar.configuration.preventBreaking": "Zerbrechen verhindern",
+  "excavar.configuration.sneakingRequired": "Schleichen erforderlich",
+
+  "excavar.configuration.invertForbiddenTag": "Verbotene-Blocks Tag umkehren",
+  "excavar.configuration.xpUsage": "XP-Verbrauch",
+  "excavar.configuration.forbiddenItems": "Verbotene Gegenstände",
+  "excavar.configuration.forbiddenShapes": "Verbotene Formen",
+  "excavar.configuration.requiresCorrectTool": "Richtiges Werkzeug erforderlich",
+  "excavar.configuration.fistForbidden": "Abbau mit Faust verboten",
+  "excavar.configuration.hungerUsage": "Hunger-Verbrauch",
+  "excavar.configuration.collectDrops": "Drops einsammeln",
+  "excavar.configuration.xpUsageType": "Art des XP-Verbrauchs",
+  "excavar.configuration.allowedBlocks": "Erlaubte Blöcke",
+  "excavar.configuration.disableDiagonals": "Diagonale deaktivieren",
+  "excavar.configuration.groupedTags": "Gruppierte Tags",
+  "excavar.configuration.blocklimit": "Blocklimit",
+  "excavar.configuration.allowShapeSelection": "Formauswahl erlauben"
 }
