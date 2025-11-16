@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Excavador {
@@ -119,7 +120,12 @@ public class Excavador {
             return;
         }
 
-        this.shape.addNeighbors(this.level, this.start.mutable(), this.side.getOpposite(), this.originalState, this.blocksToMine, limit);
+        List<BlockPos> collectedBlocks = new ArrayList<>(this.blocksToMine);
+        this.shape.addNeighbors(this.level, this.start.mutable(), this.side.getOpposite(), this.originalState, collectedBlocks, limit);
+
+        collectedBlocks.remove(this.start);
+        int canAdd = Math.min(limit, collectedBlocks.size());
+        this.blocksToMine.addAll(collectedBlocks.subList(0, canAdd));
     }
 
     /**
