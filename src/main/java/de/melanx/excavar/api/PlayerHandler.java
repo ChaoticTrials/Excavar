@@ -31,13 +31,20 @@ public class PlayerHandler {
     }
 
     /**
+     * @param id The {@link UUID} of the player
+     */
+    public boolean isDigging(UUID id) {
+        return this.diggers.contains(id);
+    }
+
+    /**
      * Checks whether the {@code player} can mine multiple blocks.
      * Considers the {@link ClientData}.
      * Considers whether the {@code player} is digging.
      */
     public boolean canDig(Player player) {
         UUID id = player.getGameProfile().getId();
-        return this.players.containsKey(id) && (!this.players.get(id).requiresSneaking || player.isShiftKeyDown()) && !this.diggers.contains(id);
+        return this.players.containsKey(id) && (!this.players.get(id).requiresSneaking || player.isShiftKeyDown()) && !this.isDigging(id);
     }
 
     /**
