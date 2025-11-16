@@ -40,6 +40,10 @@ public class ListHandler {
 
     public static void onConfigChange(ModConfigEvent event) {
         ModConfig config = event.getConfig();
+        if (event instanceof ModConfigEvent.Unloading) {
+            return;
+        }
+
         if (config.getModId().equals(Excavar.MODID) && config.getType() == ModConfig.Type.SERVER) {
             TOOL_DENY_LIST = null;
             Shapes.refreshSelectableShapes();
