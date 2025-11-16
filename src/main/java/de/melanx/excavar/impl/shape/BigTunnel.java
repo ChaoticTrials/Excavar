@@ -1,6 +1,5 @@
 package de.melanx.excavar.impl.shape;
 
-import de.melanx.excavar.api.shape.Matcher;
 import de.melanx.excavar.api.shape.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,15 +13,11 @@ public class BigTunnel implements Shape {
 
     @Override
     public void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
-        if (maxBlocks <= 0) {
-            return;
-        }
-
         Direction[] planeAxes = this.crossSectionAxes(forwardDirection);
         Direction axisA = planeAxes[0];
         Direction axisB = planeAxes[1];
 
-        if (Matcher.SAME_BLOCK.test(originalState, level.getBlockState(pos))) {
+        if (this.canAddBlock(level, pos, originalState, blocksToMine, maxBlocks)) {
             blocksToMine.add(pos.immutable());
             maxBlocks--;
         }
@@ -42,7 +37,7 @@ public class BigTunnel implements Shape {
                             .relative(axisA, a)
                             .relative(axisB, b);
 
-                    if (Matcher.SAME_BLOCK.test(originalState, level.getBlockState(candidate))) {
+                    if (this.canAddBlock(level, candidate, originalState, blocksToMine, maxBlocks)) {
                         layer.add(candidate);
                     }
                 }
@@ -50,7 +45,7 @@ public class BigTunnel implements Shape {
 
             // forward center block
             pos = pos.move(forwardDirection);
-            if (Matcher.SAME_BLOCK.test(originalState, level.getBlockState(pos))) {
+            if (this.canAddBlock(level, pos, originalState, blocksToMine, maxBlocks)) {
                 layer.add(pos.immutable());
             }
 

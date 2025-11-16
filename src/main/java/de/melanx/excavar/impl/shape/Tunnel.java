@@ -1,6 +1,5 @@
 package de.melanx.excavar.impl.shape;
 
-import de.melanx.excavar.api.shape.Matcher;
 import de.melanx.excavar.api.shape.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +14,7 @@ public class Tunnel implements Shape {
     public void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         BlockPos.MutableBlockPos neighbor = pos.mutable().move(forwardDirection);
 
-        while (maxBlocks > 0 && !blocksToMine.contains(neighbor) && Matcher.SAME_BLOCK.test(originalState, level.getBlockState(neighbor))) {
+        while (this.canAddBlock(level, neighbor, originalState, blocksToMine, maxBlocks)) {
             blocksToMine.add(neighbor.immutable());
             maxBlocks--;
             neighbor = neighbor.move(forwardDirection);
