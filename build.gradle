@@ -53,7 +53,7 @@ mod.configure {
 
     upload {
         all {
-            type 'release'
+            type 'beta'
             version '1.21.7'
             version '1.21.8'
         }
