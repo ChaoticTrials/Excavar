@@ -25,6 +25,7 @@ public class ConfigHandler {
     public static ModConfigSpec.BooleanValue allowShapeSelection;
     public static ModConfigSpec.BooleanValue fistForbidden;
     public static ModConfigSpec.BooleanValue invertForbiddenTag;
+    public static ModConfigSpec.BooleanValue collectDrops;
     public static ModConfigSpec.EnumValue<ShapeUtil.Type> allowedBlocks;
     public static ModConfigSpec.ConfigValue<List<? extends String>> deniedTools;
     public static ModConfigSpec.ConfigValue<List<? extends String>> deniedShapes;
@@ -49,6 +50,8 @@ public class ConfigHandler {
                 .define("fistForbidden", false);
         invertForbiddenTag = builder.comment("Inverts the block tag 'excavar:forbidden_blocks' to allow only these")
                 .define("invertForbiddenTag", false);
+        collectDrops = builder.comment("All the drops of all blocks will be collected and dropped at the location of the block you initially broke.")
+                .define("collectDrops", false);
         allowedBlocks = builder.comment("Defines which blocks can be mined with Excavar")
                 .defineEnum("allowedBlocks", ShapeUtil.Type.ALL);
         deniedTools = builder.comment("A list of tools which aren't allowed.",
