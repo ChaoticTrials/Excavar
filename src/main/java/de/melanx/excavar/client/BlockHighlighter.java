@@ -59,7 +59,7 @@ public class BlockHighlighter {
             this.excavador.findBlocks(maxBlocks);
             List<VoxelShape> allShapes = Lists.newArrayList();
             for (BlockPos pos : this.excavador.getBlocksToMine()) {
-                VoxelShape blockShape = this.excavador.level.getBlockState(pos).getVisualShape(this.excavador.level, pos, CollisionContext.empty());
+                VoxelShape blockShape = this.excavador.level.getBlockState(pos).getShape(this.excavador.level, pos, CollisionContext.empty());
                 double dx = pos.getX() - this.excavador.start.getX();
                 double dy = pos.getY() - this.excavador.start.getY();
                 double dz = pos.getZ() - this.excavador.start.getZ();
