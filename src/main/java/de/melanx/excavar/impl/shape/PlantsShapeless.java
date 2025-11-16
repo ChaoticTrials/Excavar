@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class PlantsShapeless extends Shapeless implements Shape {
@@ -54,8 +55,9 @@ public class PlantsShapeless extends Shapeless implements Shape {
         return CORNER_OFFSETS;
     }
 
+    @Nonnull
     @Override
-    protected Matcher blockMatcher() {
+    public Matcher blockMatcher() {
         return Matcher.PLANT;
     }
 }

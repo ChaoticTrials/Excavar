@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public interface Shape {
@@ -25,4 +26,13 @@ public interface Shape {
      * @param maxBlocks        The number of blocks to add to the list
      */
     void addNeighbors(Level level, BlockPos.MutableBlockPos pos, Direction forwardDirection, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks);
+
+    @Nonnull
+    default Matcher blockMatcher() {
+        return Matcher.SAME_BLOCK;
+    }
+
+    default boolean canAddBlock(Level level, BlockPos pos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
+        return maxBlocks > 0 && !blocksToMine.contains(pos) && this.blockMatcher().test(originalState, level.getBlockState(pos));
+    }
 }
