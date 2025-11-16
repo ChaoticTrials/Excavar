@@ -78,7 +78,7 @@ public class EventListener {
     }
 
     @SubscribeEvent
-    public static void captureDrops(BlockDropsEvent event) {
+    public void captureDrops(BlockDropsEvent event) {
         if (!ConfigHandler.collectDrops.get()) {
             return;
         }

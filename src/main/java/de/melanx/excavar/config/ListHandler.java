@@ -2,6 +2,7 @@ package de.melanx.excavar.config;
 
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
+import de.melanx.excavar.api.ConfiguredSameTags;
 import de.melanx.excavar.api.shape.Shapes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +43,7 @@ public class ListHandler {
         if (config.getModId().equals(Excavar.MODID) && config.getType() == ModConfig.Type.SERVER) {
             TOOL_DENY_LIST = null;
             Shapes.refreshSelectableShapes();
+            ConfiguredSameTags.refreshTags(ConfigHandler.groupedTags.get());
         }
     }
 

@@ -121,7 +121,7 @@ public class Excavador {
         }
 
         List<BlockPos> collectedBlocks = new ArrayList<>(this.blocksToMine);
-        this.shape.addNeighbors(this.level, this.start.mutable(), this.side.getOpposite(), this.originalState, collectedBlocks, limit);
+        this.shape.addNeighbors(this.level, this.player, this.start.mutable(), this.side.getOpposite(), this.originalState, collectedBlocks, limit);
 
         collectedBlocks.remove(this.start);
         int canAdd = Math.min(limit, collectedBlocks.size());
