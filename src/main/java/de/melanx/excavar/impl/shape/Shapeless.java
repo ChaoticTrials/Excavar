@@ -1,7 +1,6 @@
 package de.melanx.excavar.impl.shape;
 
 import com.google.common.collect.Lists;
-import de.melanx.excavar.api.shape.Matcher;
 import de.melanx.excavar.api.shape.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -52,10 +51,6 @@ public class Shapeless implements Shape {
         return CORNER_OFFSETS;
     }
 
-    protected Matcher blockMatcher() {
-        return Matcher.SAME_BLOCK;
-    }
-
     protected void addNeighbors(Level level, BlockPos.MutableBlockPos pos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks, BlockPos mainPos) {
         if (maxBlocks <= 0) {
             return;
@@ -81,7 +76,7 @@ public class Shapeless implements Shape {
     }
 
     protected int tryAddBlock(Level level, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
-        if (!blocksToMine.contains(pos) && this.blockMatcher().test(originalState, level.getBlockState(pos))) {
+        if (this.canAddBlock(level, pos, originalState, blocksToMine, maxBlocks)) {
             blocksToMine.add(pos.immutable());
             maxBlocks--;
         }
@@ -92,10 +87,6 @@ public class Shapeless implements Shape {
 
     protected int tryAddByDirections(Level level, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         for (Direction direction : this.directions()) {
-            if (maxBlocks <= 0) {
-                return maxBlocks;
-            }
-
             pos.move(direction);
             maxBlocks = this.tryAddBlock(level, pos, originalPos, originalState, blocksToMine, maxBlocks);
         }
@@ -105,10 +96,6 @@ public class Shapeless implements Shape {
 
     protected int tryAddByOffsets(Level level, BlockPos.MutableBlockPos pos, BlockPos originalPos, BlockState originalState, List<BlockPos> blocksToMine, int maxBlocks) {
         for (BlockPos offset : this.cornerOffsets()) {
-            if (maxBlocks == 0) {
-                return maxBlocks;
-            }
-
             pos.move(offset);
             maxBlocks = this.tryAddBlock(level, pos, originalPos, originalState, blocksToMine, maxBlocks);
         }
