@@ -55,7 +55,7 @@ mod.configure {
 
     upload {
         all {
-            type 'release'
+            type 'beta'
             version '1.21.3'
             version '1.21.4'
             version '1.21.5'
