@@ -3,7 +3,7 @@ package de.melanx.excavar.api;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import de.melanx.excavar.api.shape.Shapes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nonnull;
@@ -50,7 +50,7 @@ public class PlayerHandler {
     /**
      * Provides the selected shape id of the given player.
      */
-    public ResourceLocation getShapeId(UUID id) {
+    public Identifier getShapeId(UUID id) {
         ClientData data = this.players.get(id);
         return data == null ? Shapes.getSelectedShape() : data.shapeId();
     }
@@ -91,9 +91,9 @@ public class PlayerHandler {
     /**
      * Used to store the client config in the {@link PlayerHandler}
      */
-    public record ClientData(boolean requiresSneaking, boolean preventToolBreaking, ResourceLocation shapeId) {
+    public record ClientData(boolean requiresSneaking, boolean preventToolBreaking, Identifier shapeId) {
 
-        private static final ResourceLocation MISSINGNO = ResourceLocation.fromNamespaceAndPath("minecraft", "missingno");
+        private static final Identifier MISSINGNO = Identifier.fromNamespaceAndPath("minecraft", "missingno");
         public static final ClientData EMPTY = new ClientData(false, false, MISSINGNO);
     }
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,35 +14,35 @@ import java.util.Map;
 public class Shapes {
 
     public static final Logger LOGGER = LogManager.getLogger(Shapes.class);
-    private final static List<ResourceLocation> allSelectableShapes = Lists.newArrayList();
-    private final static List<ResourceLocation> selectableShapes = Lists.newArrayList();
-    private final static Map<ResourceLocation, Shape> registry = Maps.newHashMap();
-    public static final ResourceLocation SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "shapeless");
-    public static final ResourceLocation EASY_SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "easy_shapeless");
-    public static final ResourceLocation PLANTS_SHAPELESS = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "plants_shapeless");
-    public static final ResourceLocation TUNNEL = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "tunnel");
-    public static final ResourceLocation BIG_TUNNEL = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "big_tunnel");
-    private static ResourceLocation currentShape = SHAPELESS;
+    private final static List<Identifier> allSelectableShapes = Lists.newArrayList();
+    private final static List<Identifier> selectableShapes = Lists.newArrayList();
+    private final static Map<Identifier, Shape> registry = Maps.newHashMap();
+    public static final Identifier SHAPELESS = Identifier.fromNamespaceAndPath(Excavar.MODID, "shapeless");
+    public static final Identifier EASY_SHAPELESS = Identifier.fromNamespaceAndPath(Excavar.MODID, "easy_shapeless");
+    public static final Identifier PLANTS_SHAPELESS = Identifier.fromNamespaceAndPath(Excavar.MODID, "plants_shapeless");
+    public static final Identifier TUNNEL = Identifier.fromNamespaceAndPath(Excavar.MODID, "tunnel");
+    public static final Identifier BIG_TUNNEL = Identifier.fromNamespaceAndPath(Excavar.MODID, "big_tunnel");
+    private static Identifier currentShape = SHAPELESS;
 
     private Shapes() {}
 
     /**
      * Used to register a custom {@link Shape}
      *
-     * @see Shapes#register(ResourceLocation, Shape, boolean)
+     * @see Shapes#register(Identifier, Shape, boolean)
      */
-    public static void register(ResourceLocation id, Shape shape) {
+    public static void register(Identifier id, Shape shape) {
         register(id, shape, true);
     }
 
     /**
      * Used to register a custom {@link Shape}
      *
-     * @param id         The {@link ResourceLocation} linked to the {@link Shape} instance
+     * @param id         The {@link Identifier} linked to the {@link Shape} instance
      * @param shape      The {@link Shape} which will be registered
      * @param selectable Whether the {@link Shape} should be selectable
      */
-    public static void register(ResourceLocation id, Shape shape, boolean selectable) {
+    public static void register(Identifier id, Shape shape, boolean selectable) {
         if (registry.containsKey(id)) {
             throw new IllegalStateException("Shape '" + id + "' already registered.");
         }
@@ -58,7 +58,7 @@ public class Shapes {
      * @param id The registry name of the shape
      * @return A registered {@link Shape}.
      */
-    public static Shape getShape(ResourceLocation id) {
+    public static Shape getShape(Identifier id) {
         if (!registry.containsKey(id)) {
             throw new IllegalArgumentException("Shape '" + id + "' was not registered.");
         }
@@ -69,7 +69,7 @@ public class Shapes {
     /**
      * @return The next shape id in the list.
      */
-    public static ResourceLocation nextShapeId() {
+    public static Identifier nextShapeId() {
         int i = selectableShapes.indexOf(currentShape);
         if (i >= selectableShapes.size() - 1) {
             i = 0;
@@ -84,7 +84,7 @@ public class Shapes {
     /**
      * @return The previous shape id in the list.
      */
-    public static ResourceLocation previousShapeId() {
+    public static Identifier previousShapeId() {
         int i = selectableShapes.indexOf(currentShape);
         if (i == 0) {
             i = selectableShapes.size() - 1;
@@ -99,7 +99,7 @@ public class Shapes {
     /**
      * @return The current selected shape id.
      */
-    public static ResourceLocation getSelectedShape() {
+    public static Identifier getSelectedShape() {
         return currentShape;
     }
 

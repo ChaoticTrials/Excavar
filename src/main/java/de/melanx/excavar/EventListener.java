@@ -9,7 +9,7 @@ import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.client.HiddenRenderTypes;
 import de.melanx.excavar.config.ListHandler;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -50,7 +50,7 @@ public class EventListener {
 
                 Direction side = ((BlockHitResult) player.pick(20, 0, false)).getDirection();
 
-                ResourceLocation shapeId = playerHandler.getShapeId(playerId);
+                Identifier shapeId = playerHandler.getShapeId(playerId);
                 if (!ConfigHandler.allowShapeSelection.get() || Shapes.SHAPELESS.equals(shapeId)) {
                     shapeId = ShapeUtil.getShapeId(state.getBlock());
                 }

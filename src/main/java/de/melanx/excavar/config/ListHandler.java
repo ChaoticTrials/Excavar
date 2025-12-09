@@ -5,7 +5,7 @@ import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.ConfiguredSameTags;
 import de.melanx.excavar.api.shape.Shapes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.config.ModConfig;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class ListHandler {
 
-    private static Set<ResourceLocation> TOOL_DENY_LIST = null;
+    private static Set<Identifier> TOOL_DENY_LIST = null;
 
     private static void validate() {
         if (TOOL_DENY_LIST != null) {
@@ -28,9 +28,9 @@ public class ListHandler {
         TOOL_DENY_LIST = new HashSet<>();
         Set<Pattern> deniedTools = ConfigHandler.deniedTools.get().stream().map(s -> Pattern.compile("^" + s.replace("*", ".*") + "$")).collect(Collectors.toSet());
         for (Pattern regex : deniedTools) {
-            Set<ResourceLocation> itemIds = BuiltInRegistries.ITEM.keySet();
+            Set<Identifier> itemIds = BuiltInRegistries.ITEM.keySet();
             for (int k = 0; k < itemIds.size(); k++) {
-                ResourceLocation id = (ResourceLocation) itemIds.toArray()[k];
+                Identifier id = (Identifier) itemIds.toArray()[k];
                 if (id.toString().matches(regex.pattern())) {
                     TOOL_DENY_LIST.add(id);
                 }

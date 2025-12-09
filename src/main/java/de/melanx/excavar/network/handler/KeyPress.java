@@ -5,14 +5,14 @@ import de.melanx.excavar.api.PlayerHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
 
 public record KeyPress(UUID playerId, PressType pressType, PlayerHandler.ClientData data) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "key_press");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Excavar.MODID, "key_press");
     public static final CustomPacketPayload.Type<KeyPress> TYPE = new CustomPacketPayload.Type<>(ID);
 
     public KeyPress(UUID playerId, PressType pressType) {
@@ -42,11 +42,11 @@ public record KeyPress(UUID playerId, PressType pressType, PlayerHandler.ClientD
         buffer.writeEnum(msg.pressType);
         buffer.writeBoolean(msg.data.requiresSneaking());
         buffer.writeBoolean(msg.data.preventToolBreaking());
-        buffer.writeResourceLocation(msg.data.shapeId());
+        buffer.writeIdentifier(msg.data.shapeId());
     }
 
     private static KeyPress decode(FriendlyByteBuf buffer) {
-        return new KeyPress(buffer.readUUID(), buffer.readEnum(PressType.class), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readResourceLocation()));
+        return new KeyPress(buffer.readUUID(), buffer.readEnum(PressType.class), new PlayerHandler.ClientData(buffer.readBoolean(), buffer.readBoolean(), buffer.readIdentifier()));
     }
 
     public enum PressType {

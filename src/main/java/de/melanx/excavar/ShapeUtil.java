@@ -1,7 +1,7 @@
 package de.melanx.excavar;
 
 import de.melanx.excavar.api.shape.Shapes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.VegetationBlock;
@@ -20,7 +20,7 @@ public class ShapeUtil {
         };
     }
 
-    public static ResourceLocation getShapeId(Block block) {
+    public static Identifier getShapeId(Block block) {
         if (block instanceof VegetationBlock) {
             return Shapes.PLANTS_SHAPELESS;
         }

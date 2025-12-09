@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class Excavador {
 
-    public static final TagKey<Block> FORBIDDEN_BLOCKS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("excavar", "forbidden_blocks"));
+    public static final TagKey<Block> FORBIDDEN_BLOCKS = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("excavar", "forbidden_blocks"));
 
     public final BlockPos start;
     public final Level level;
@@ -42,7 +42,7 @@ public class Excavador {
     /**
      * Creates a new instance of Excavador
      *
-     * @see #Excavador(ResourceLocation, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
+     * @see #Excavador(Identifier, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
      */
     public Excavador(@Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState) {
         this(start, level, player, side, originalState, ConfigHandler.requiresCorrectTool.get());
@@ -51,7 +51,7 @@ public class Excavador {
     /**
      * Creates a new instance of Excavador
      *
-     * @see #Excavador(ResourceLocation, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
+     * @see #Excavador(Identifier, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
      */
     public Excavador(@Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool) {
         this(Shapes.getSelectedShape(), start, level, player, side, originalState, requiresCorrectTool, Excavar.getPlayerHandler().getData(player.getGameProfile().id()).preventToolBreaking());
@@ -60,25 +60,25 @@ public class Excavador {
     /**
      * Creates a new instance of Excavador
      *
-     * @see #Excavador(ResourceLocation, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
+     * @see #Excavador(Identifier, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
      */
-    public Excavador(@Nonnull ResourceLocation shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState) {
+    public Excavador(@Nonnull Identifier shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState) {
         this(shapeId, start, level, player, side, originalState, ConfigHandler.requiresCorrectTool.get());
     }
 
     /**
      * Creates a new instance of Excavador
      *
-     * @see #Excavador(ResourceLocation, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
+     * @see #Excavador(Identifier, BlockPos, Level, Player, Direction, BlockState, boolean, boolean)
      */
-    public Excavador(@Nonnull ResourceLocation shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool) {
+    public Excavador(@Nonnull Identifier shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool) {
         this(shapeId, start, level, player, side, originalState, requiresCorrectTool, Excavar.getPlayerHandler().getData(player.getGameProfile().id()).preventToolBreaking());
     }
 
     /**
      * Creates a new instance of Excavador
      *
-     * @param shapeId             The {@link ResourceLocation} id of the registered {@link Shape} in {@link Shapes}
+     * @param shapeId             The {@link Identifier} id of the registered {@link Shape} in {@link Shapes}
      * @param start               The base block position where to start searching for other {@link BlockPos}'
      * @param level               The {@link Level} where all the magic happens
      * @param player              The {@link Player} which breaks the blocks
@@ -87,7 +87,7 @@ public class Excavador {
      * @param requiresCorrectTool Whether the tool is a correct tool to generate drops
      * @param preventToolBreaking Whether the tool should be saved while mining
      */
-    public Excavador(@Nonnull ResourceLocation shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool, boolean preventToolBreaking) {
+    public Excavador(@Nonnull Identifier shapeId, @Nonnull BlockPos start, @Nonnull Level level, @Nonnull Player player, @Nonnull Direction side, @Nonnull BlockState originalState, boolean requiresCorrectTool, boolean preventToolBreaking) {
         this.start = start.immutable();
         this.level = level;
         this.player = player;

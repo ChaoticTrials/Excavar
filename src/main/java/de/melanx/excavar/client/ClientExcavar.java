@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -30,7 +30,7 @@ import org.lwjgl.glfw.GLFW;
 @Mod(value = Excavar.MODID, dist = Dist.CLIENT)
 public class ClientExcavar {
 
-    public static final KeyMapping.Category EXCAVAR_KEYS = new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "keys"));
+    public static final KeyMapping.Category EXCAVAR_KEYS = new KeyMapping.Category(Identifier.fromNamespaceAndPath(Excavar.MODID, "keys"));
     public static final KeyMapping EXCAVAR = new KeyMapping(Excavar.MODID + ".key.excavar", GLFW.GLFW_KEY_LEFT_ALT, EXCAVAR_KEYS);
 
     public ClientExcavar(IEventBus bus, ModContainer modContainer) {
@@ -71,8 +71,8 @@ public class ClientExcavar {
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (EXCAVAR.isDown() && Minecraft.getInstance().hasShiftDown() && player != null && Minecraft.getInstance().screen == null) {
-            ResourceLocation prevId = Shapes.getSelectedShape();
-            ResourceLocation id;
+            Identifier prevId = Shapes.getSelectedShape();
+            Identifier id;
             if (event.getScrollDeltaY() > 0) {
                 id = Shapes.previousShapeId();
             } else {
@@ -111,7 +111,7 @@ public class ClientExcavar {
     }
 
     private static void displayShapeSelection(Player player) {
-        ResourceLocation id = Shapes.getSelectedShape();
+        Identifier id = Shapes.getSelectedShape();
         MutableComponent msg = Component.translatable("excavar.shape.selected");
         msg.append(Component.translatable(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
         player.displayClientMessage(msg, true);

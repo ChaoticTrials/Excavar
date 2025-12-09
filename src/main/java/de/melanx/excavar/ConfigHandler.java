@@ -1,7 +1,7 @@
 package de.melanx.excavar;
 
 import de.melanx.excavar.api.shape.Shapes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class ConfigHandler {
         deniedShapes = builder.comment("A list of shapes which aren't allowed.", "All registered shapes can be found in latest.log, but only selectable shapes can be disabled.")
                 .defineList("forbiddenShapes", List.of(
                         Shapes.BIG_TUNNEL.toString()
-                ), () -> "excavar:shapeless", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
+                ), () -> "excavar:shapeless", s -> s instanceof String str && Identifier.tryParse(str) != null);
         groupedTags = builder.comment("A list of tags which will be grouped together.")
                 .defineList("groupedTags", List.of(), () -> "", s -> s instanceof String);
     }
