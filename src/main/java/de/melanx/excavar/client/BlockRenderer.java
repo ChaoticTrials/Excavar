@@ -31,7 +31,7 @@ public class BlockRenderer implements CustomBlockOutlineRenderer {
     public boolean render(@Nonnull BlockOutlineRenderState renderState, @Nonnull MultiBufferSource.BufferSource buffer, @Nonnull PoseStack poseStack, boolean translucentPass, @Nonnull LevelRenderState levelRenderState) {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
-        if (!ClientConfig.enableOutline.get() || !ListHandler.isToolAllowed(player.getMainHandItem())) {
+        if (!ClientConfig.enableOutline.get()) {
             return false;
         }
 
@@ -41,11 +41,11 @@ public class BlockRenderer implements CustomBlockOutlineRenderer {
 
         BlockState state = player.level().getBlockState(hitResult.getBlockPos());
 
-        if (!ShapeUtil.miningAllowed(state)) {
+        if (state.isAir() || !ShapeUtil.miningAllowed(state)) {
             return false;
         }
 
-        if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get())) {
+        if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get()) && ListHandler.isToolAllowed(player.getMainHandItem())) {
             if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape())) || this.blockHighlighter == null) {
                 this.blockHighlighter = new BlockHighlighter(hitResult);
                 this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape()));
