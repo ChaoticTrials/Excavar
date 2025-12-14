@@ -105,18 +105,18 @@ public class ClientExcavar {
     public void renderBlockHighlights(RenderHighlightEvent.Block event) {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
-        if (!ClientConfig.enableOutline.get() || !ListHandler.isToolAllowed(player.getMainHandItem())) {
+        if (!ClientConfig.enableOutline.get()) {
             return;
         }
 
         BlockHitResult hitResult = event.getTarget();
         BlockState state = player.level().getBlockState(hitResult.getBlockPos());
 
-        if (!ShapeUtil.miningAllowed(state)) {
+        if (state.isAir() || !ShapeUtil.miningAllowed(state)) {
             return;
         }
 
-        if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get())) {
+        if (EXCAVAR.isDown() && (player.isShiftKeyDown() || !ClientConfig.onlyWhileSneaking.get()) && ListHandler.isToolAllowed(player.getMainHandItem())) {
             if (!this.matcher.matches(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape())) || this.blockHighlighter == null) {
                 this.blockHighlighter = new BlockHighlighter(hitResult);
                 this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape()));
