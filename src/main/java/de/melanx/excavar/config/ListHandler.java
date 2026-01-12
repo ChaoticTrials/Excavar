@@ -2,42 +2,38 @@ package de.melanx.excavar.config;
 
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ListHandler {
 
-    private static Set<ResourceLocation> TOOL_DENY_LIST = null;
+    private static Pattern FORBIDDEN_TOOLS = null;
 
     private static void validate() {
-        if (TOOL_DENY_LIST != null) {
+        if (FORBIDDEN_TOOLS != null) {
             return;
         }
 
-        TOOL_DENY_LIST = new HashSet<>();
-        Set<Pattern> deniedTools = ConfigHandler.deniedTools.get().stream().map(s -> Pattern.compile("^" + s.replace("*", ".*") + "$")).collect(Collectors.toSet());
-        for (Pattern regex : deniedTools) {
-            Set<ResourceLocation> itemIds = ForgeRegistries.ITEMS.getKeys();
-            for (int k = 0; k < itemIds.size(); k++) {
-                ResourceLocation id = (ResourceLocation) itemIds.toArray()[k];
-                if (id.toString().matches(regex.pattern())) {
-                    TOOL_DENY_LIST.add(id);
-                }
-            }
+        if (ConfigHandler.deniedTools.get().isEmpty()) {
+            FORBIDDEN_TOOLS = Pattern.compile("(?!)");
+            return;
         }
+
+        String regex = ConfigHandler.deniedTools.get().stream()
+                .map(s -> s.replace("*", ".*"))
+                .collect(Collectors.joining("|", "^(", ")$"));
+
+        FORBIDDEN_TOOLS = Pattern.compile(regex);
     }
 
     public static void onConfigChange(ModConfigEvent event) {
         if (event.getConfig().getModId().equals(Excavar.MODID)) {
-            TOOL_DENY_LIST = null;
+            FORBIDDEN_TOOLS = null;
         }
     }
 
@@ -47,6 +43,6 @@ public class ListHandler {
 
     public static boolean isToolAllowed(Item item) {
         ListHandler.validate();
-        return !TOOL_DENY_LIST.contains(ForgeRegistries.ITEMS.getKey(item));
+        return !FORBIDDEN_TOOLS.matcher(String.valueOf(ForgeRegistries.ITEMS.getKey(item))).matches();
     }
 }
