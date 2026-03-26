@@ -1,7 +1,8 @@
 package de.melanx.excavar.client;
 
+import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.platform.DepthTestFunction;
+import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -17,8 +18,9 @@ public class HiddenRenderTypes {
             .withLocation(Identifier.fromNamespaceAndPath("excavar", "pipeline/hidden_outlines"))
             .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH, VertexFormat.Mode.LINES)
             .withCull(false)
-            .withDepthWrite(false)
-            .withDepthTestFunction(DepthTestFunction.GREATER_DEPTH_TEST)
+            .withDepthStencilState(new DepthStencilState(CompareOp.GREATER_THAN, false, 0.0F, 0.0F))
+//            .withDepthWrite(false)
+//            .withDepthTestFunction(DepthTestFunction.GREATER_DEPTH_TEST)
             .build();
 
     public static final RenderType HIDDEN_OUTLINES = RenderType.create(

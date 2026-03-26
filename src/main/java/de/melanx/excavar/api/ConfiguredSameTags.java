@@ -34,7 +34,7 @@ public class ConfiguredSameTags {
     }
 
     public static boolean isAllowed(BlockState originalState, BlockState otherState) {
-        for (TagKey<Block> blockTagKey : originalState.getTags().toList()) {
+        for (TagKey<Block> blockTagKey : originalState.tags().toList()) {
             if (TAGS.containsKey(blockTagKey) && otherState.is(blockTagKey)) {
                 return true;
             }

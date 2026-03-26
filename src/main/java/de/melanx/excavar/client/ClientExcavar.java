@@ -114,6 +114,6 @@ public class ClientExcavar {
         Identifier id = Shapes.getSelectedShape();
         MutableComponent msg = Component.translatable("excavar.shape.selected");
         msg.append(Component.translatable(id.getNamespace() + ".shape." + id.getPath().replace("/", ".") + ".desc").withStyle(ChatFormatting.GOLD));
-        player.displayClientMessage(msg, true);
+        player.sendOverlayMessage(msg);
     }
 }

@@ -8,8 +8,8 @@ import de.melanx.excavar.config.ListHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.state.BlockOutlineRenderState;
-import net.minecraft.client.renderer.state.LevelRenderState;
+import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +36,10 @@ public class BlockRenderer implements CustomBlockOutlineRenderer {
         }
 
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult)) {
+            return false;
+        }
+
+        if (player == null) {
             return false;
         }
 
