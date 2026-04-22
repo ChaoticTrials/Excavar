@@ -20,7 +20,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class EventListener {
     public static Map<UUID, List<ItemEntity>> ITEMS_FOR_PLAYER = Maps.newHashMap();
 
     @SubscribeEvent
-    public static void onBreakBlock(BlockEvent.BreakEvent event) {
+    public static void onBreakBlock(BreakBlockEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
             PlayerHandler playerHandler = Excavar.getPlayerHandler();
             UUID playerId = player.getGameProfile().id();
