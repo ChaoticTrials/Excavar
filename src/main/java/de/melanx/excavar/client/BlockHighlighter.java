@@ -2,7 +2,6 @@ package de.melanx.excavar.client;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.melanx.excavar.ShapeUtil;
 import de.melanx.excavar.api.Excavador;
 import net.minecraft.client.Minecraft;
@@ -21,10 +20,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.awt.Color;
 import java.util.List;
 
 public class BlockHighlighter {
 
+    public static final Color LIGHT_GRAY = new Color(255, 255, 255, 30);
     private final Excavador excavador;
     private VoxelShape shape;
     private final ClientLevel level;
@@ -53,8 +54,8 @@ public class BlockHighlighter {
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
             int maxBlocks = (ClientConfig.considerDurability.get() && heldItem.isDamageableItem())
                     ? heldItem.getMaxDamage() - heldItem.getDamageValue() - (ClientConfig.preventToolsBreaking.get()
-                    ? 2
-                    : 1) // we need to increase this by 1, otherwise it would display 1 block too much
+                                                                             ? 2
+                                                                             : 1) // we need to increase this by 1, otherwise it would display 1 block too much
                     : Integer.MAX_VALUE;
             this.excavador.findBlocks(maxBlocks);
             List<VoxelShape> allShapes = Lists.newArrayList();
@@ -65,6 +66,7 @@ public class BlockHighlighter {
                 double dz = pos.getZ() - this.excavador.start.getZ();
                 allShapes.add(blockShape.move(dx, dy, dz));
             }
+
             this.shape = Shapes.or(Shapes.empty(), allShapes.toArray(new VoxelShape[]{})).optimize();
         }
 
@@ -76,8 +78,9 @@ public class BlockHighlighter {
         Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         poseStack.translate(this.excavador.start.getX() - projection.x, this.excavador.start.getY() - projection.y, this.excavador.start.getZ() - projection.z);
 
-        VertexConsumer vertex = OutlineBuffer.INSTANCE.getBuffer(RenderType.lines());
-        ShapeRenderer.renderShape(poseStack, vertex, this.shape(), 0,0,0, -1);
+        VoxelShape allBlocksShape = this.shape();
+        ShapeRenderer.renderShape(poseStack, buffer.getBuffer(RenderType.lines()), allBlocksShape, 0, 0, 0, Color.WHITE.getRGB());
+        ShapeRenderer.renderShape(poseStack, buffer.getBuffer(HiddenRenderTypes.HIDDEN_OUTLINES), allBlocksShape, 0, 0, 0, LIGHT_GRAY.getRGB());
         poseStack.popPose();
     }
 }

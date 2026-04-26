@@ -24,8 +24,7 @@ public class Shapes {
     public static final ResourceLocation BIG_TUNNEL = ResourceLocation.fromNamespaceAndPath(Excavar.MODID, "big_tunnel");
     private static ResourceLocation currentShape = SHAPELESS;
 
-    private Shapes() {
-    }
+    private Shapes() {}
 
     /**
      * Used to register a custom {@link Shape}
