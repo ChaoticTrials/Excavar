@@ -55,8 +55,6 @@ mod.configure {
         all {
             type 'beta'
             version '1.21.4'
-            version '1.21.5'
-            version '1.21.6'
         }
         curseforge {
             projectId 561528
