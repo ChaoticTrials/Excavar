@@ -7,8 +7,7 @@ import de.melanx.excavar.api.Excavador;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.ShapeRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -73,14 +72,14 @@ public class BlockHighlighter {
         return this.shape;
     }
 
-    public void render(MultiBufferSource buffer, PoseStack poseStack) {
+    public void render(SubmitNodeCollector submitNodeCollector, PoseStack poseStack) {
         poseStack.pushPose();
-        Vec3 projection = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        Vec3 projection = Minecraft.getInstance().gameRenderer.mainCamera().position();
         poseStack.translate(this.excavador.start.getX() - projection.x, this.excavador.start.getY() - projection.y, this.excavador.start.getZ() - projection.z);
 
         VoxelShape allBlocksShape = this.shape();
-        ShapeRenderer.renderShape(poseStack, buffer.getBuffer(RenderTypes.LINES), allBlocksShape, 0, 0, 0, Color.WHITE.getRGB(), 2);
-        ShapeRenderer.renderShape(poseStack, buffer.getBuffer(HiddenRenderTypes.HIDDEN_OUTLINES), allBlocksShape, 0, 0, 0, LIGHT_GRAY.getRGB(), 2);
+        submitNodeCollector.submitShapeOutline(poseStack, allBlocksShape, RenderTypes.LINES, Color.WHITE.getRGB(), 2, true);
+        submitNodeCollector.submitShapeOutline(poseStack, allBlocksShape, HiddenRenderTypes.HIDDEN_OUTLINES, LIGHT_GRAY.getRGB(), 2, false);
         poseStack.popPose();
     }
 }

@@ -7,7 +7,7 @@ import de.melanx.excavar.api.shape.Shapes;
 import de.melanx.excavar.config.ListHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,7 @@ public class BlockRenderer implements CustomBlockOutlineRenderer {
     private Matcher matcher = new Matcher(BlockPos.ZERO, null, Blocks.AIR.defaultBlockState(), null, null);
 
     @Override
-    public boolean render(@Nonnull BlockOutlineRenderState renderState, @Nonnull MultiBufferSource.BufferSource buffer, @Nonnull PoseStack poseStack, boolean translucentPass, @Nonnull LevelRenderState levelRenderState) {
+    public boolean render(@Nonnull BlockOutlineRenderState renderState, @Nonnull SubmitNodeCollector submitNodeCollector, @Nonnull PoseStack poseStack, @Nonnull LevelRenderState levelRenderState) {
         LocalPlayer player = Minecraft.getInstance().player;
         //noinspection ConstantConditions
         if (!ClientConfig.enableOutline.get()) {
@@ -55,7 +55,8 @@ public class BlockRenderer implements CustomBlockOutlineRenderer {
                 this.matcher = new Matcher(hitResult.getBlockPos(), hitResult.getDirection(), state, player.getMainHandItem(), Shapes.getShape(Shapes.getSelectedShape()));
             }
 
-            this.blockHighlighter.render(buffer, poseStack);
+            this.blockHighlighter.render(submitNodeCollector, poseStack);
+            return true;
         } else {
             this.blockHighlighter = null;
         }

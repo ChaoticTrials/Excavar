@@ -70,7 +70,7 @@ public class ClientExcavar {
         }
 
         LocalPlayer player = Minecraft.getInstance().player;
-        if (EXCAVAR.isDown() && Minecraft.getInstance().hasShiftDown() && player != null && Minecraft.getInstance().screen == null) {
+        if (EXCAVAR.isDown() && Minecraft.getInstance().hasShiftDown() && player != null && Minecraft.getInstance().gui.screen() == null) {
             Identifier prevId = Shapes.getSelectedShape();
             Identifier id;
             if (event.getScrollDeltaY() > 0) {
