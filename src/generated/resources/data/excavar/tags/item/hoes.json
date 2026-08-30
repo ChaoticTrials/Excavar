@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#minecraft:hoes",
+    {
+      "id": "#c:tools/aiots",
+      "required": false
+    }
+  ]
+}
