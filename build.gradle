@@ -59,6 +59,7 @@ mod.configure {
             version '1.21.4'
             version '1.21.5'
             version '1.21.6'
+            environmentType 'client_and_server'
         }
         curseforge {
             projectId 561528
