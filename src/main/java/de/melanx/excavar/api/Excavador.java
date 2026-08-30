@@ -143,6 +143,11 @@ public class Excavador {
         int i = 0;
         boolean payedXp = false;
         for (BlockPos pos : this.blocksToMine) {
+            if (pos.equals(this.start)) {
+                i++;
+                continue;
+            }
+
             boolean xpUsageRequirement = switch(ConfigHandler.xpUsageType.get()) {
                 case PER_BLOCK -> i >= 1;
                 case PER_ACTION -> i == 1 || !payedXp;
