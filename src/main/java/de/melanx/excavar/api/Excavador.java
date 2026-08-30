@@ -5,6 +5,7 @@ import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.shape.Shape;
 import de.melanx.excavar.api.shape.Shapes;
+import de.melanx.excavar.data.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -12,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -203,11 +203,11 @@ public class Excavador {
     }
 
     private boolean toolTagMatchesBlock(ItemStack stack, BlockState state) {
-        boolean isAxe = stack.is(ItemTags.AXES);
-        boolean isHoe = stack.is(ItemTags.HOES);
-        boolean isPickaxe = stack.is(ItemTags.PICKAXES);
-        boolean isShovel = stack.is(ItemTags.SHOVELS);
-        boolean isSword = stack.is(ItemTags.SWORDS);
+        boolean isAxe = stack.is(ModItemTags.AXES);
+        boolean isHoe = stack.is(ModItemTags.HOES);
+        boolean isPickaxe = stack.is(ModItemTags.PICKAXES);
+        boolean isShovel = stack.is(ModItemTags.SHOVELS);
+        boolean isSword = stack.is(ModItemTags.SWORDS);
 
         boolean blockNeedsAxe = state.is(BlockTags.MINEABLE_WITH_AXE);
         boolean blockNeedsHoe = state.is(BlockTags.MINEABLE_WITH_HOE);
