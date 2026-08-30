@@ -57,6 +57,7 @@ mod.configure {
             type 'beta'
             version '1.21'
             version '1.21.1'
+            environmentType 'client_and_server'
         }
         curseforge {
             projectId 561528
