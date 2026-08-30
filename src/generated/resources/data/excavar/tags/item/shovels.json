@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#minecraft:shovels",
+    "#c:tools/aiots",
+    {
+      "id": "#c:tools/paxels",
+      "required": false
+    }
+  ]
+}

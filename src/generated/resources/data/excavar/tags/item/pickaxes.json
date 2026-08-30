@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#minecraft:pickaxes",
+    "#c:tools/aiots",
+    {
+      "id": "#c:tools/paxels",
+      "required": false
+    }
+  ]
+}
