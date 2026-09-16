@@ -13,6 +13,6 @@ public class DataCreator {
     public static void gatherData(GatherDataEvent.Server event) {
         DataGenerator generator = event.getGenerator();
 
-        generator.addProvider(true, new ModItemTags(generator.getPackOutput(), event.getLookupProvider()));
+        generator.addProvider(true, new ModItemTags(generator.getPackOutput(), event.getReloadableLookupProvider()));
     }
 }
