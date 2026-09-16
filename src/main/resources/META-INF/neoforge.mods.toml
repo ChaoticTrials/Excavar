@@ -10,6 +10,8 @@ displayName = "Excavar"
 displayURL = "${mod.source_url}"
 updateJSONURL = "https://assets.melanx.de/updates/excavar.json"
 authors = "MelanX"
+bannerFile = "${mod.modid}_logo.png"
+iconFile = "${mod.modid}_icon.png"
 description = """
 A lightweight excavation mod for modern Minecraft versions
 """
