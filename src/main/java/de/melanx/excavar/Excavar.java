@@ -22,7 +22,7 @@ public class Excavar {
 
     public Excavar(IEventBus bus, ModContainer modContainer) {
         playerHandler = new PlayerHandler();
-        modContainer.registerConfig(ModConfig.Type.SERVER, ConfigHandler.SERVER_CONFIG);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, ConfigHandler.SERVER_CONFIG);
         bus.addListener(this::commonSetup);
         bus.addListener(DiggingNetwork::onRegisterPayloadHandler);
         bus.addListener(ListHandler::onConfigChange);

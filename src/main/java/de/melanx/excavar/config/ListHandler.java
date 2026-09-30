@@ -40,7 +40,7 @@ public class ListHandler {
             return;
         }
 
-        if (config.getModId().equals(Excavar.MODID) && config.getType() == ModConfig.Type.SERVER) {
+        if (config.getModId().equals(Excavar.MODID) && config.getType() == ModConfig.Type.SYNCED) {
             FORBIDDEN_TOOLS = null;
             Shapes.refreshSelectableShapes();
             ConfiguredSameTags.refreshTags(ConfigHandler.groupedTags.get());

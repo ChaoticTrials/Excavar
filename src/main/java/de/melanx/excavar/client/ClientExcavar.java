@@ -1,5 +1,6 @@
 package de.melanx.excavar.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import de.melanx.excavar.ConfigHandler;
 import de.melanx.excavar.Excavar;
 import de.melanx.excavar.api.PlayerHandler;
@@ -25,13 +26,12 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Excavar.MODID, dist = Dist.CLIENT)
 public class ClientExcavar {
 
     public static final KeyMapping.Category EXCAVAR_KEYS = new KeyMapping.Category(Identifier.fromNamespaceAndPath(Excavar.MODID, "keys"));
-    public static final KeyMapping EXCAVAR = new KeyMapping(Excavar.MODID + ".key.excavar", GLFW.GLFW_KEY_LEFT_ALT, EXCAVAR_KEYS);
+    public static final KeyMapping EXCAVAR = new KeyMapping(Excavar.MODID + ".key.excavar", InputConstants.KEY_LALT, EXCAVAR_KEYS);
 
     public ClientExcavar(IEventBus bus, ModContainer modContainer) {
         NeoForge.EVENT_BUS.register(this);
@@ -100,11 +100,11 @@ public class ClientExcavar {
             return;
         }
 
-        if (action == GLFW.GLFW_PRESS) {
+        if (action == InputConstants.PRESS) {
             PlayerHandler.ClientData data = new PlayerHandler.ClientData(ClientConfig.onlyWhileSneaking.get(), ClientConfig.preventToolsBreaking.get(), Shapes.getSelectedShape());
             DiggingNetwork.press(player, data);
             Excavar.getPlayerHandler().putPlayer(player.getGameProfile().id(), data);
-        } else if (action == GLFW.GLFW_RELEASE) {
+        } else if (action == InputConstants.RELEASE) {
             DiggingNetwork.release(player);
             Excavar.getPlayerHandler().removePlayer(player.getGameProfile().id());
         }
